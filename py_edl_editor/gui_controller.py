@@ -78,9 +78,48 @@ class GuiController(object):
         self._fill_edl_table()
 
     def remove_reel_ext(self):
-        """Remove extension from Reels"""
+        """Remove extension from all reel names."""
         for event in self.edl.events:
             event.reel = os.path.splitext(event.reel)[0]
+        self._fill_edl_table()
+
+    def prepend_reels(self):
+        """Prepend all reel names with user input string."""
+        reply = QtWidgets.QInputDialog.getText(
+            None, "Batch Edit Reels | Prepend String", "String to be prepended:"
+        )
+        if reply[1]:
+            text = reply[0]
+            for event in self.edl.events:
+                event.reel = f"{text}{event.reel}"
+        self._fill_edl_table()
+
+    def append_reels(self):
+        """Append user input string to all reel names."""
+        reply = QtWidgets.QInputDialog.getText(
+            None, "Batch Edit Reels | Append String", "String to be appended:"
+        )
+        if reply[1]:
+            text = reply[0]
+            for event in self.edl.events:
+                event.reel = f"{event.reel}{text}"
+        self._fill_edl_table()
+
+    def replace_reels(self):
+        """Replace string in all reel names."""
+        reply = QtWidgets.QInputDialog.getText(
+            None,
+            "Batch Edit Reels | Replace String",
+            "{0}{1}\n\n{2}".format(
+                "String to be replaced followed by replacement string ",
+                "(divided by comma)",
+                "Example: 'old_value, new_value'",
+            )
+        )
+        if reply[1]:
+            old_value, new_value = reply[0].strip().split(',')
+            for event in self.edl.events:
+                event.reel = event.reel.replace(old_value, new_value)
         self._fill_edl_table()
 
     def toggle_frames_and_tc(self):
