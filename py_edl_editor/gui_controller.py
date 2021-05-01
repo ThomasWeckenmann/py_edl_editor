@@ -86,6 +86,12 @@ class GuiController(object):
             self._fix_event_clip_name_comment(event)
         self._fill_edl_table()
 
+    def copy_source_file_to_reel(self):
+        """Copy Source File to Reel."""
+        for event in self.edl.events:
+            event.reel = event.source_file
+        self._fill_edl_table()
+
     def remove_reel_ext(self):
         """Remove extension from all reel names."""
         for event in self.edl.events:

@@ -79,7 +79,16 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         )
         tools_layout_left.addRow(switch_reel_button)
         switch_reel_button.clicked.connect(self.controller.switch_reel)
-        
+
+        # Copy Source File to Reel
+        copy_source_file_to_reel_button = QtWidgets.QPushButton(
+            "Copy Source File to Reel", self
+        )
+        tools_layout_left.addRow(copy_source_file_to_reel_button)
+        copy_source_file_to_reel_button.clicked.connect(
+            self.controller.copy_source_file_to_reel
+        )
+
         # Remove extension from reels
         remove_reel_ext_button = QtWidgets.QPushButton(
             "Remove extension from Reels", self
