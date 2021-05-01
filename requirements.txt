@@ -1,0 +1,5 @@
+certifi==2020.12.5
+edl==0.1.11
+PySide6==6.0.3
+shiboken6==6.0.3
+timecode==1.3.1
