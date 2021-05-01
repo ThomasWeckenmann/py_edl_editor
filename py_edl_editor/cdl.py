@@ -99,10 +99,7 @@ class Cdl(object):
             list: List containing all lines of the ColorCorrection XML.
         
         """
-        lines = []
-        for line in self.cc_xml():
-            lines.append(f"\t{line}")
-        return lines
+        return [f"\t{line}" for line in self.cc_xml()]
     
     def __str__(self):
         """Return a string representation of the CDL instance."""
