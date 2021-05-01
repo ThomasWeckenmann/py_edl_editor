@@ -7,6 +7,7 @@ Simon Hargreaves https://pypi.org/project/edl/ which is using
 
 Work in progress, so collaboration welcome.
 
+![py_edl_editor](py_edl_editor_gui.png?raw=true)
 
 Usage without EDL::
 
