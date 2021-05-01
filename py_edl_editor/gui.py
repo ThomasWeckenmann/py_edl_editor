@@ -32,69 +32,67 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         self.setMinimumHeight(600)
 
         # Main Layout.
-        self.layout = QtWidgets.QHBoxLayout()
-        self.layout_left = QtWidgets.QVBoxLayout()
-        self.layout_right = QtWidgets.QVBoxLayout()
+        layout = QtWidgets.QHBoxLayout()
+        layout_left = QtWidgets.QVBoxLayout()
+        layout_right = QtWidgets.QVBoxLayout()
 
         # Form Layouts Left.
-        self.input_layout_left = QtWidgets.QFormLayout()
-        self.tools_layout_left = QtWidgets.QFormLayout()
-        self.output_layout_left = QtWidgets.QFormLayout()
+        input_layout_left = QtWidgets.QFormLayout()
+        tools_layout_left = QtWidgets.QFormLayout()
+        output_layout_left = QtWidgets.QFormLayout()
         
         # Input Group on the left
-        self.input_group_box = QtWidgets.QGroupBox("Input")
+        input_group_box = QtWidgets.QGroupBox("Input")
 
         # EDL Title
         self.edl_title = QtWidgets.QLabel("", self)
-        self.input_layout_left.addRow(self.edl_title)
+        input_layout_left.addRow(self.edl_title)
 
         # FPS Dropdown
-        self.framerate_label = QtWidgets.QLabel("FPS:", self)
+        framerate_label = QtWidgets.QLabel("FPS:", self)
         self.framerate = QtWidgets.QComboBox(self) 
         self.framerates = FRAMERATES
         self.framerate.addItems(self.framerates)
-        self.input_layout_left.addRow(self.framerate_label, self.framerate)
+        input_layout_left.addRow(framerate_label, self.framerate)
         self.framerate.currentIndexChanged.connect(
             self.controller.update_framerate
         )
 
         # Open EDL Button
-        self.select_edl_button_box = QtWidgets.QHBoxLayout()
-        self.select_edl_button = QtWidgets.QPushButton("Open EDL", self)
-        self.select_edl_button_box.addWidget(self.select_edl_button)
-        self.input_layout_left.addRow(self.select_edl_button_box)
-        self.select_edl_button.clicked.connect(self.controller.open_edl)
+        select_edl_button_box = QtWidgets.QHBoxLayout()
+        select_edl_button = QtWidgets.QPushButton("Open EDL", self)
+        select_edl_button_box.addWidget(select_edl_button)
+        input_layout_left.addRow(select_edl_button_box)
+        select_edl_button.clicked.connect(self.controller.open_edl)
         
         # Tools Group on the left
-        self.tools_group_box = QtWidgets.QGroupBox("Tools")
+        tools_group_box = QtWidgets.QGroupBox("Tools")
         
         # Edit EDL Title
         edit_edl_title_button = QtWidgets.QPushButton("Edit EDL Title", self)
-        self.tools_layout_left.addRow(edit_edl_title_button)
+        tools_layout_left.addRow(edit_edl_title_button)
         edit_edl_title_button.clicked.connect(self.controller.edit_edl_title)
 
         # Switch Reel and Clip Name Button
-        self.switch_reel_button = QtWidgets.QPushButton(
+        switch_reel_button = QtWidgets.QPushButton(
             "Switch Reel and Clip Name", self
         )
-        self.tools_layout_left.addRow(self.switch_reel_button)
-        self.switch_reel_button.clicked.connect(self.controller.switch_reel)
+        tools_layout_left.addRow(switch_reel_button)
+        switch_reel_button.clicked.connect(self.controller.switch_reel)
         
         # Remove extension from reels
-        self.remove_reel_ext_button = QtWidgets.QPushButton(
+        remove_reel_ext_button = QtWidgets.QPushButton(
             "Remove extension from Reels", self
         )
-        self.tools_layout_left.addRow(self.remove_reel_ext_button)
-        self.remove_reel_ext_button.clicked.connect(
-            self.controller.remove_reel_ext
-        )
+        tools_layout_left.addRow(remove_reel_ext_button)
+        remove_reel_ext_button.clicked.connect(self.controller.remove_reel_ext)
         
         # Show Frames instead of TC
-        self.toggle_frames_and_tc_button = QtWidgets.QPushButton(
+        toggle_frames_and_tc_button = QtWidgets.QPushButton(
             "Show Frames instead of TC", self
         )
-        self.tools_layout_left.addRow(self.toggle_frames_and_tc_button)
-        self.toggle_frames_and_tc_button.clicked.connect(
+        tools_layout_left.addRow(toggle_frames_and_tc_button)
+        toggle_frames_and_tc_button.clicked.connect(
             self.controller.toggle_frames_and_tc
         )
 
@@ -107,33 +105,33 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         batch_edit_reels_hbox.addWidget(prepend_reels_button)
         batch_edit_reels_hbox.addWidget(append_reels_button)
         batch_edit_reels_hbox.addWidget(replace_reels_button)
-        self.tools_layout_left.addRow(batch_edit_reels_label)
-        self.tools_layout_left.addRow(batch_edit_reels_hbox)
+        tools_layout_left.addRow(batch_edit_reels_label)
+        tools_layout_left.addRow(batch_edit_reels_hbox)
         prepend_reels_button.clicked.connect(self.controller.prepend_reels)
         append_reels_button.clicked.connect(self.controller.append_reels)
         replace_reels_button.clicked.connect(self.controller.replace_reels)
 
         # Output Group on the left
-        self.output_group_box = QtWidgets.QGroupBox("Output")
+        output_group_box = QtWidgets.QGroupBox("Output")
         
         # Save EDL Buttons
-        self.save_edl_button = QtWidgets.QPushButton("Save EDL", self)
-        self.save_edl_as_button = QtWidgets.QPushButton("Save EDL As...", self)
-        self.output_layout_left.addRow(self.save_edl_button)
-        self.output_layout_left.addRow(self.save_edl_as_button)
-        self.save_edl_button.clicked.connect(self.controller.save_edl)
-        self.save_edl_as_button.clicked.connect(self.controller.save_edl_as)
+        save_edl_button = QtWidgets.QPushButton("Save EDL", self)
+        save_edl_as_button = QtWidgets.QPushButton("Save EDL As...", self)
+        output_layout_left.addRow(save_edl_button)
+        output_layout_left.addRow(save_edl_as_button)
+        save_edl_button.clicked.connect(self.controller.save_edl)
+        save_edl_as_button.clicked.connect(self.controller.save_edl_as)
 
         # Export CDL
-        self.export_cdl_button = QtWidgets.QPushButton("Export CDLs", self)
+        export_cdl_button = QtWidgets.QPushButton("Export CDLs", self)
         self.cdl_type = QtWidgets.QComboBox(self) 
-        self.cdl_types = [".ccc", ".cc", ".cdl"]
-        self.cdl_type.addItems(self.cdl_types)
-        self.output_layout_left.addRow(self.export_cdl_button, self.cdl_type)
-        self.export_cdl_button.clicked.connect(self.controller.export_cdl)
+        cdl_types = [".ccc", ".cc", ".cdl"]
+        self.cdl_type.addItems(cdl_types)
+        output_layout_left.addRow(export_cdl_button, self.cdl_type)
+        export_cdl_button.clicked.connect(self.controller.export_cdl)
         
         # Form Layout Right.
-        self.form_layout_right = QtWidgets.QFormLayout()
+        form_layout_right = QtWidgets.QFormLayout()
 
         # EDL
         self.edl_view = EdlEditor()
@@ -144,22 +142,22 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         tools_vbox = QtWidgets.QVBoxLayout()
         output_vbox = QtWidgets.QVBoxLayout()
         
-        input_vbox.addLayout(self.input_layout_left)
-        tools_vbox.addLayout(self.tools_layout_left)
-        output_vbox.addLayout(self.output_layout_left)
+        input_vbox.addLayout(input_layout_left)
+        tools_vbox.addLayout(tools_layout_left)
+        output_vbox.addLayout(output_layout_left)
         
-        self.input_group_box.setLayout(input_vbox)
-        self.tools_group_box.setLayout(tools_vbox)
-        self.output_group_box.setLayout(output_vbox)
+        input_group_box.setLayout(input_vbox)
+        tools_group_box.setLayout(tools_vbox)
+        output_group_box.setLayout(output_vbox)
 
-        self.layout_left.addWidget(self.input_group_box)
-        self.layout_left.addWidget(self.tools_group_box)
-        self.layout_left.addWidget(self.output_group_box)
-        self.layout_right.addWidget(self.edl_view)
+        layout_left.addWidget(input_group_box)
+        layout_left.addWidget(tools_group_box)
+        layout_left.addWidget(output_group_box)
+        layout_right.addWidget(self.edl_view)
         
-        self.layout.addLayout(self.layout_left)
-        self.layout.addLayout(self.layout_right)
-        self.setLayout(self.layout)
+        layout.addLayout(layout_left)
+        layout.addLayout(layout_right)
+        self.setLayout(layout)
         
     def run(self, qt_app):
         """Run the QT App.
