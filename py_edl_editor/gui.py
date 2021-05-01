@@ -120,6 +120,11 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         append_reels_button.clicked.connect(self.controller.append_reels)
         replace_reels_button.clicked.connect(self.controller.replace_reels)
 
+        # Reset changes
+        reset_changes_button = QtWidgets.QPushButton("Reset changes", self)
+        tools_layout_left.addRow(reset_changes_button)
+        reset_changes_button.clicked.connect(self.controller.reset_changes)
+
         # Output Group on the left
         output_group_box = QtWidgets.QGroupBox("Output")
         

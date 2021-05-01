@@ -68,6 +68,10 @@ class GuiController(object):
         )[0]
         self.update_edl_view()
 
+    def reset_changes(self):
+        """Reset all changes and go back to last saved state."""
+        self.update_edl_view()
+
     def edit_edl_title(self):
         """Update the EDL title."""
         reply = QtWidgets.QInputDialog.getText(
