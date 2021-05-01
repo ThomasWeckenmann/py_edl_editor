@@ -77,6 +77,12 @@ class GuiController(object):
             self._fix_event_clip_name_comment(event)
         self._fill_edl_table()
 
+    def remove_reel_ext(self):
+        """Remove extension from Reels"""
+        for event in self.edl.events:
+            event.reel = os.path.splitext(event.reel)[0]
+        self._fill_edl_table()
+
     def toggle_frames_and_tc(self):
         """Toggle between showing SMPTE TCs and Frame numbers."""
         edl_table = self.gui.edl_view.edl_table
@@ -85,6 +91,8 @@ class GuiController(object):
 
     def save_edl(self):
         """Save EDL (overwrite loaded EDL file)."""
+        for event in self.edl.events:
+            self._fix_event_clip_name_comment(event)
         self._write_file(self.edl_path, [self.edl.to_string()])
 
     def save_edl_as(self):

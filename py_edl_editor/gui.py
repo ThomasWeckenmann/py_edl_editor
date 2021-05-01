@@ -69,6 +69,13 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         self.tools_layout_left.addRow(self.switch_reel_button)
         self.switch_reel_button.clicked.connect(self.controller.switch_reel)
         
+        # Remove extension from reels
+        self.remove_reel_ext_button = QtWidgets.QPushButton(
+            "Remove extension from Reels", self
+        )
+        self.tools_layout_left.addRow(self.remove_reel_ext_button)
+        self.remove_reel_ext_button.clicked.connect(self.controller.remove_reel_ext)
+        
         # Show Frames instead of TC
         self.toggle_frames_and_tc_button = QtWidgets.QPushButton(
             "Show Frames instead of TC", self
