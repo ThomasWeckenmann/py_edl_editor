@@ -108,9 +108,9 @@ class Cdl(object):
         """Return a string representation of the CDL instance."""
         if self._is_empty:
             return "-"
-        return (f"({self.slope_red} {self.slope_green} {self.slope_blue})\n"
-                f"({self.offset_red} {self.offset_green} {self.offset_blue })\n"
-                f"({self.power_red} {self.power_green} {self.power_blue})\n"
+        return (f"{self.slope_red} {self.slope_green} {self.slope_blue}\n"
+                f"{self.offset_red} {self.offset_green} {self.offset_blue}\n"
+                f"{self.power_red} {self.power_green} {self.power_blue}\n"
                 f"{self.saturation}")
 
 def ccc_xml(cdls):
