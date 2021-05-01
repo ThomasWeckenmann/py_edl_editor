@@ -68,6 +68,15 @@ class GuiController(object):
         )[0]
         self.update_edl_view()
 
+    def edit_edl_title(self):
+        """Update the EDL title."""
+        reply = QtWidgets.QInputDialog.getText(
+            None, "Update EDL Title", "New EDL Title:"
+        )
+        if reply[1]:
+            self.edl.title = reply[0]
+        self.gui.edl_title.setText(f"EDL Title: {self.edl.title}")
+
     def switch_reel(self):
         """Switch EDL Reel and EDL Clip Name."""
         for event in self.edl.events:
@@ -140,6 +149,8 @@ class GuiController(object):
             caption='Save File As...', dir=self.edl_path
         )[0]
         self._write_file(dest_file_path, [self.edl.to_string()])
+        self.edl_path = dest_file_path
+        self.update_edl_view()
 
     def export_cdl(self):
         """Export CDLs as textfiles. CDL type based on GUI dropdown."""
@@ -186,6 +197,7 @@ class GuiController(object):
     def _set_edl(self):
         """Parse and set the EDL."""
         self.edl = parse_edl(self.edl_path, self.fps)
+        self.gui.edl_title.setText(f"EDL Title: {self.edl.title}")
 
     def _fill_edl_table(self):
         """Fill the EDL view with edl table events."""

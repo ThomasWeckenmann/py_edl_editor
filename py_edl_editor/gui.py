@@ -44,6 +44,10 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         # Input Group on the left
         self.input_group_box = QtWidgets.QGroupBox("Input")
 
+        # EDL Title
+        self.edl_title = QtWidgets.QLabel("", self)
+        self.input_layout_left.addRow(self.edl_title)
+
         # FPS Dropdown
         self.framerate_label = QtWidgets.QLabel("FPS:", self)
         self.framerate = QtWidgets.QComboBox(self) 
@@ -64,6 +68,11 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         # Tools Group on the left
         self.tools_group_box = QtWidgets.QGroupBox("Tools")
         
+        # Edit EDL Title
+        edit_edl_title_button = QtWidgets.QPushButton("Edit EDL Title", self)
+        self.tools_layout_left.addRow(edit_edl_title_button)
+        edit_edl_title_button.clicked.connect(self.controller.edit_edl_title)
+
         # Switch Reel and Clip Name Button
         self.switch_reel_button = QtWidgets.QPushButton(
             "Switch Reel and Clip Name", self
