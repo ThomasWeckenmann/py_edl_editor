@@ -63,14 +63,21 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         self.tools_group_box = QtWidgets.QGroupBox("Tools")
         
         # Switch Reel and Clip Name Button
-        self.switch_reel_button_box = QtWidgets.QHBoxLayout()
         self.switch_reel_button = QtWidgets.QPushButton(
             "Switch Reel and Clip Name", self
         )
-        self.switch_reel_button_box.addWidget(self.switch_reel_button)
-        self.tools_layout_left.addRow(self.switch_reel_button_box)
+        self.tools_layout_left.addRow(self.switch_reel_button)
         self.switch_reel_button.clicked.connect(self.controller.switch_reel)
         
+        # Show Frames instead of TC
+        self.toggle_frames_and_tc_button = QtWidgets.QPushButton(
+            "Show Frames instead of TC", self
+        )
+        self.tools_layout_left.addRow(self.toggle_frames_and_tc_button)
+        self.toggle_frames_and_tc_button.clicked.connect(
+            self.controller.toggle_frames_and_tc
+        )
+
         # Output Group on the left
         self.output_group_box = QtWidgets.QGroupBox("Output")
         

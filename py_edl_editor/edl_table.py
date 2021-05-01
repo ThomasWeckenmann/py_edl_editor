@@ -68,6 +68,7 @@ class EdlTable(QtCore.QAbstractTableModel):
         """Initialize the EdlTable instance."""
         super(EdlTable, self).__init__()
         self.events = []
+        self.show_frames = False
 
     def clear(self):
         """Clear the table."""
@@ -213,10 +214,28 @@ class EdlTable(QtCore.QAbstractTableModel):
         if col == 3:
             return str(edl_event.cdl)
         if col == 4:
-            return str(edl_event.src_start_tc)        
+            return self._timecode_string(edl_event.src_start_tc)
         if col == 5:
-            return str(edl_event.src_end_tc)
+            return self._timecode_string(edl_event.src_end_tc)
         if col == 6:
-            return str(edl_event.rec_start_tc)
+            return self._timecode_string(edl_event.rec_start_tc)
         if col == 7:
-            return str(edl_event.rec_end_tc)
+            return self._timecode_string(edl_event.rec_end_tc)
+
+    def _timecode_string(self, timecode):
+        """Return String representation of the given Timecode instance.
+
+        Depending on show_frames, returning as Frames or SPMTE Timecode String.
+
+        Args:
+            timecode (Timecode): Timecode instance to be converted to a string.
+
+        Returns:
+            string: String representation of the given Timecode instance either
+                as Frames or as SPMTE Timecode String.
+
+        """
+        if self.show_frames:
+            return str(timecode.frames)
+        else:
+            return str(timecode)

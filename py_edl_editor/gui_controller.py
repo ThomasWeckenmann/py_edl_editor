@@ -70,13 +70,19 @@ class GuiController(object):
         self.update_edl_view()
 
     def switch_reel(self):
-        """Swisch EDL Reel and EDL Clip Name."""
+        """Switch EDL Reel and EDL Clip Name."""
         for event in self.edl_table_events:
             reel = event.reel
             event.reel = event.clip_name
             event.clip_name = reel
             self._fix_event_clip_name_comment(event)
         self._fill_edl_table()
+
+    def toggle_frames_and_tc(self):
+        """Toggle between showing SMPTE TCs and Frame numbers."""
+        edl_table = self.gui.edl_view.edl_table
+        edl_table.show_frames = not edl_table.show_frames
+        self.update_edl_view()
 
     def save_edl(self):
         """Save EDL (overwrite loaded EDL file)."""
