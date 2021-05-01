@@ -1,8 +1,8 @@
 py_edl_editor
 =============
 
-A python EDL (Edit Decision List) GUI, based on the ruby EDL library by
-Simon Hargreaves https://pypi.org/project/edl/ which is using
+A python EDL (Edit Decision List) GUI, based on the EDL library by Simon
+Hargreaves https://pypi.org/project/edl/ which is using
 [pytimecode](https://code.google.com/p/pytimecode/).
 
 Work in progress, so collaboration welcome.
@@ -19,8 +19,7 @@ Usage with EDL::
     python __main__.py path_to_edl.edl 24
 
 Accepted framerate values ['60', '59.94', '50', '30', '29.97', '25', '24',
-'23.98'] whole number frame rates are more tested than others, but the accuracy
-relies heavily on accuracy of the pytimecode library.
+'23.98'].
 
 (The MIT License)
 
