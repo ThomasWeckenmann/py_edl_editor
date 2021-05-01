@@ -38,6 +38,7 @@ class PyEdlEditorApp(QtWidgets.QWidget):
 
         # Form Layouts Left.
         input_layout_left = QtWidgets.QFormLayout()
+        display_layout_left = QtWidgets.QFormLayout()
         tools_layout_left = QtWidgets.QFormLayout()
         output_layout_left = QtWidgets.QFormLayout()
         
@@ -64,7 +65,19 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         select_edl_button_box.addWidget(select_edl_button)
         input_layout_left.addRow(select_edl_button_box)
         select_edl_button.clicked.connect(self.controller.open_edl)
-        
+
+        # Display Group on the left
+        display_group_box = QtWidgets.QGroupBox("Display")
+
+        # Show Frames instead of TC
+        toggle_frames_and_tc_button = QtWidgets.QPushButton(
+            "Show Frames instead of TC", self
+        )
+        display_layout_left.addRow(toggle_frames_and_tc_button)
+        toggle_frames_and_tc_button.clicked.connect(
+            self.controller.toggle_frames_and_tc
+        )
+
         # Tools Group on the left
         tools_group_box = QtWidgets.QGroupBox("Tools")
         
@@ -95,26 +108,18 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         )
         tools_layout_left.addRow(remove_reel_ext_button)
         remove_reel_ext_button.clicked.connect(self.controller.remove_reel_ext)
-        
-        # Show Frames instead of TC
-        toggle_frames_and_tc_button = QtWidgets.QPushButton(
-            "Show Frames instead of TC", self
-        )
-        tools_layout_left.addRow(toggle_frames_and_tc_button)
-        toggle_frames_and_tc_button.clicked.connect(
-            self.controller.toggle_frames_and_tc
-        )
 
         # Batch Edit Reels
-        batch_edit_reels_label = QtWidgets.QLabel("Batch Edit Reels:", self)
+        batch_edit_reels_label = QtWidgets.QLabel("Reels:", self)
         prepend_reels_button = QtWidgets.QPushButton("Prepend", self)
         append_reels_button = QtWidgets.QPushButton("Append", self)
         replace_reels_button = QtWidgets.QPushButton("Replace", self)
         batch_edit_reels_hbox = QtWidgets.QHBoxLayout()
+        batch_edit_reels_hbox.addWidget(batch_edit_reels_label)
         batch_edit_reels_hbox.addWidget(prepend_reels_button)
         batch_edit_reels_hbox.addWidget(append_reels_button)
         batch_edit_reels_hbox.addWidget(replace_reels_button)
-        tools_layout_left.addRow(batch_edit_reels_label)
+        # tools_layout_left.addRow(batch_edit_reels_label)
         tools_layout_left.addRow(batch_edit_reels_hbox)
         prepend_reels_button.clicked.connect(self.controller.prepend_reels)
         append_reels_button.clicked.connect(self.controller.append_reels)
@@ -153,18 +158,22 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         
         # Set Layout
         input_vbox = QtWidgets.QVBoxLayout()
+        display_vbox = QtWidgets.QVBoxLayout()
         tools_vbox = QtWidgets.QVBoxLayout()
         output_vbox = QtWidgets.QVBoxLayout()
         
         input_vbox.addLayout(input_layout_left)
+        display_vbox.addLayout(display_layout_left)
         tools_vbox.addLayout(tools_layout_left)
         output_vbox.addLayout(output_layout_left)
         
         input_group_box.setLayout(input_vbox)
+        display_group_box.setLayout(display_vbox)
         tools_group_box.setLayout(tools_vbox)
         output_group_box.setLayout(output_vbox)
 
         layout_left.addWidget(input_group_box)
+        layout_left.addWidget(display_group_box)
         layout_left.addWidget(tools_group_box)
         layout_left.addWidget(output_group_box)
         layout_right.addWidget(self.edl_view)
