@@ -132,9 +132,9 @@ class GuiController(object):
             )
         )
         if reply[1]:
-            old_value, new_value = reply[0].strip().split(',')
+            old_value, new_value = reply[0].split(',')
             for event in self.edl.events:
-                event.reel = event.reel.replace(old_value, new_value)
+                event.reel = event.reel.replace(old_value, new_value.strip())
         self._fill_edl_table()
 
     def toggle_frames_and_tc(self):
