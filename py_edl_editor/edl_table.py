@@ -58,10 +58,9 @@ class EdlTable(QtCore.QAbstractTableModel):
         "Reel",
         "Clip Name",
         "CDL",
-        "Source TC In",
-        "Source TC Out",
-        "Rec TC In",
-        "Rec TC Out",    
+        "Source TC In\nSource TC Out",
+        "Rec TC In\nRec TC Out",
+        "",
     ]
 
     def __init__(self):
@@ -139,6 +138,9 @@ class EdlTable(QtCore.QAbstractTableModel):
         
         if role == QtCore.Qt.FontRole and index.column() == 3:
             return QtGui.QFont('Courier', 10)
+        
+        if role == QtCore.Qt.FontRole and index.column() in [4, 5]:
+            return QtGui.QFont('Courier', 13)
 
     def setData(self, index, value, role):
         """Set the role data for the item at index to value.
@@ -214,13 +216,13 @@ class EdlTable(QtCore.QAbstractTableModel):
         if col == 3:
             return str(edl_event.cdl)
         if col == 4:
-            return self._timecode_string(edl_event.src_start_tc)
+            src_start = self._timecode_string(edl_event.src_start_tc)
+            src_end = self._timecode_string(edl_event.src_end_tc)
+            return f"{src_start}\n{src_end}"
         if col == 5:
-            return self._timecode_string(edl_event.src_end_tc)
-        if col == 6:
-            return self._timecode_string(edl_event.rec_start_tc)
-        if col == 7:
-            return self._timecode_string(edl_event.rec_end_tc)
+            rec_start = self._timecode_string(edl_event.rec_start_tc)
+            rec_end = self._timecode_string(edl_event.rec_end_tc)
+            return f"{rec_start}\n{rec_end}"
 
     def _timecode_string(self, timecode):
         """Return String representation of the given Timecode instance.
