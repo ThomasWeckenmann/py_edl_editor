@@ -21,11 +21,10 @@ def parse_edl(edl_path, fps):
         fps (float): Frame Rate for EDL calculations.
 
     Returns:
-        tuple: EDL instance and list of EDL Events.
+        Edl: EDL instance.
 
     """
     parser = Parser(fps)
-    edl_events = []
     if os.path.isfile(edl_path):
         with open(edl_path) as edl_file:
             edl = parser.parse(edl_file)
@@ -37,8 +36,7 @@ def parse_edl(edl_path, fps):
                             event.cdl.set_sop(get_sop(comment))
                         if "ASC_SAT" in comment:
                             event.cdl.set_sat(get_sat(comment))
-                edl_events.append(event)
-    return edl, edl_events
+    return edl
 
 
 def get_sop(comment):

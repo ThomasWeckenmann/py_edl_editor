@@ -26,7 +26,6 @@ class GuiController(object):
         """
         self.gui = gui
         self.edl = None
-        self.edl_table_events = []
         self.edl_path = ""
         self.fps = 24
         self.dest_folder = ""
@@ -54,7 +53,7 @@ class GuiController(object):
         self.gui.setWindowTitle(
             f"EDL Editor [{os.path.split(self.edl_path)[1]}]"
         )
-        self._set_edl_table_events()
+        self._set_edl()
         self._fill_edl_table()
 
     def update_framerate(self):
@@ -71,7 +70,7 @@ class GuiController(object):
 
     def switch_reel(self):
         """Switch EDL Reel and EDL Clip Name."""
-        for event in self.edl_table_events:
+        for event in self.edl.events:
             reel = event.reel
             event.reel = event.clip_name
             event.clip_name = reel
@@ -82,7 +81,7 @@ class GuiController(object):
         """Toggle between showing SMPTE TCs and Frame numbers."""
         edl_table = self.gui.edl_view.edl_table
         edl_table.show_frames = not edl_table.show_frames
-        self.update_edl_view()
+        self._fill_edl_table()
 
     def save_edl(self):
         """Save EDL (overwrite loaded EDL file)."""
@@ -101,7 +100,7 @@ class GuiController(object):
         self.dest_folder = QtWidgets.QFileDialog.getExistingDirectory(
             caption='Choose folder', dir=self.edl_path
         )
-        cdls = [event.cdl for event in self.edl_table_events]
+        cdls = [event.cdl for event in self.edl.events]
         
         if cdl_type == ".ccc":
             basename = os.path.split(self.edl_path)[1].split(".")[0]
@@ -137,17 +136,14 @@ class GuiController(object):
             for line in lines:
                 text_file.write(f"{line}\n")
 
-    def _set_edl_table_events(self):
-        """Create one EdlTableEvent per EDL Event."""
-        self.edl_table_events = []
-        self.edl, edl_events = parse_edl(self.edl_path, self.fps)
-        for event in edl_events:
-            self.edl_table_events.append(event)
+    def _set_edl(self):
+        """Parse and set the EDL."""
+        self.edl = parse_edl(self.edl_path, self.fps)
 
     def _fill_edl_table(self):
         """Fill the EDL view with edl table events."""
         self.gui.edl_view.edl_table.clear()
-        for event in self.edl_table_events:
+        for event in self.edl.events:
             self.gui.edl_view.edl_table.add_edl_table_event(event)
         self.gui.edl_view.table.resizeColumnsToContents()
         self.gui.edl_view.table.resizeRowsToContents()
