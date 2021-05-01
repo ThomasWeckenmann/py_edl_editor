@@ -28,7 +28,7 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         self.qt_app = qt_app
         self.controller = GuiController(self)
         self.setWindowTitle("EDL Editor")
-        self.setMinimumWidth(1200)
+        self.setMinimumWidth(1400)
         self.setMinimumHeight(600)
 
         # Main Layout.
