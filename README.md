@@ -9,14 +9,13 @@ Work in progress, so collaboration welcome.
 
 
 Usage without EDL::
+
     python __main__.py
 
-
 Usage with EDL::
+
     python __main__.py [path_to_edl] [framerate]
     python __main__.py path_to_edl.edl 24
-
-
 
 Accepted framerate values ['60', '59.94', '50', '30', '29.97', '25', '24',
 '23.98'] whole number frame rates are more tested than others, but the accuracy
