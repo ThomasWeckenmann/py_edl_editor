@@ -28,61 +28,70 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         self.qt_app = qt_app
         self.controller = GuiController(self)
         self.setWindowTitle("EDL Editor")
-        self.setMinimumWidth(1400)
+        self.setMinimumWidth(1500)
         self.setMinimumHeight(600)
 
         # Set up main box layouts
         layout = QtWidgets.QHBoxLayout()
         layout_left = QtWidgets.QVBoxLayout()
+        layout_middle = QtWidgets.QVBoxLayout()
         layout_right = QtWidgets.QVBoxLayout()
 
         # Set up form layouts
-        self.input_layout_left = QtWidgets.QFormLayout()
-        self.display_layout_left = QtWidgets.QFormLayout()
-        self.tools_layout_left = QtWidgets.QFormLayout()
-        self.output_layout_left = QtWidgets.QFormLayout()
-        self.form_layout_right = QtWidgets.QFormLayout()
+        self.input_layout = QtWidgets.QFormLayout()
+        self.tools_layout = QtWidgets.QFormLayout()
+        self.output_layout = QtWidgets.QFormLayout()
+        self.edl_table_layout = QtWidgets.QFormLayout()
+        self.display_layout = QtWidgets.QFormLayout()
+        self.timecode_tools_layout = QtWidgets.QFormLayout()
         
         # Set up group boxes on the left
         input_group_box = QtWidgets.QGroupBox("Input")
         display_group_box = QtWidgets.QGroupBox("Display")
-        tools_group_box = QtWidgets.QGroupBox("Tools")
+        text_tools_group_box = QtWidgets.QGroupBox("Text Tools")
         output_group_box = QtWidgets.QGroupBox("Output")
+        timecode_tools_group_box = QtWidgets.QGroupBox("Timecode Tools")
         
         # Show group boxes
         self._input_group_elements()
         self._display_group_elements()
-        self._tools_group_elements()
+        self._text_tools_group_elements()
         self._output_group_elements()
         self._edl_group_elements()
+        self._timecode_tools_group_elements()
         
-        # Set up box layouts
+        # Set up vbox layouts
         input_vbox = QtWidgets.QVBoxLayout()
         display_vbox = QtWidgets.QVBoxLayout()
-        tools_vbox = QtWidgets.QVBoxLayout()
+        text_tools_vbox = QtWidgets.QVBoxLayout()
         output_vbox = QtWidgets.QVBoxLayout()
+        timecode_tools_vbox = QtWidgets.QVBoxLayout()
         
         # Add layouts to the box layouts
-        input_vbox.addLayout(self.input_layout_left)
-        display_vbox.addLayout(self.display_layout_left)
-        tools_vbox.addLayout(self.tools_layout_left)
-        output_vbox.addLayout(self.output_layout_left)
-        
+        input_vbox.addLayout(self.input_layout)
+        display_vbox.addLayout(self.display_layout)
+        text_tools_vbox.addLayout(self.tools_layout)
+        output_vbox.addLayout(self.output_layout)
+        timecode_tools_vbox.addLayout(self.timecode_tools_layout)
+
         # Set layout for group boxes
         input_group_box.setLayout(input_vbox)
         display_group_box.setLayout(display_vbox)
-        tools_group_box.setLayout(tools_vbox)
+        text_tools_group_box.setLayout(text_tools_vbox)
         output_group_box.setLayout(output_vbox)
+        timecode_tools_group_box.setLayout(timecode_tools_vbox)
 
         # Add group boxes to the layouts
         layout_left.addWidget(input_group_box)
-        layout_left.addWidget(display_group_box)
-        layout_left.addWidget(tools_group_box)
+        layout_left.addWidget(text_tools_group_box)
         layout_left.addWidget(output_group_box)
-        layout_right.addWidget(self.edl_view)
+        layout_middle.addWidget(self.edl_view)
+        layout_right.addWidget(display_group_box)
+        layout_right.addWidget(timecode_tools_group_box)
         
         # Set up main layout
         layout.addLayout(layout_left)
+        layout.addLayout(layout_middle)
         layout.addLayout(layout_right)
         self.setLayout(layout)
 
@@ -91,14 +100,14 @@ class PyEdlEditorApp(QtWidgets.QWidget):
 
         # EDL Title
         self.edl_title = QtWidgets.QLabel("", self)
-        self.input_layout_left.addRow(self.edl_title)
+        self.input_layout.addRow(self.edl_title)
 
         # FPS Dropdown
         framerate_label = QtWidgets.QLabel("FPS:", self)
         self.framerate = QtWidgets.QComboBox(self) 
         self.framerates = FRAMERATES
         self.framerate.addItems(self.framerates)
-        self.input_layout_left.addRow(framerate_label, self.framerate)
+        self.input_layout.addRow(framerate_label, self.framerate)
         self.framerate.currentIndexChanged.connect(
             self.controller.update_framerate
         )
@@ -107,12 +116,17 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         select_edl_button_box = QtWidgets.QHBoxLayout()
         select_edl_button = QtWidgets.QPushButton("Open EDL", self)
         select_edl_button_box.addWidget(select_edl_button)
-        self.input_layout_left.addRow(select_edl_button_box)
+        self.input_layout.addRow(select_edl_button_box)
         select_edl_button.clicked.connect(self.controller.open_edl)
+
+        # Import CDLs Button
+        import_cdl_button = QtWidgets.QPushButton("(WIP) Import CDLs", self)
+        self.input_layout.addRow(import_cdl_button)
+        # import_cdl_button.clicked.connect(self.controller.import_cdl)
 
         # Reset changes
         reset_changes_button = QtWidgets.QPushButton("Reset changes", self)
-        self.input_layout_left.addRow(reset_changes_button)
+        self.input_layout.addRow(reset_changes_button)
         reset_changes_button.clicked.connect(self.controller.reset_changes)
 
     def _display_group_elements(self):
@@ -122,31 +136,31 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         toggle_frames_and_tc_button = QtWidgets.QPushButton(
             "Show Frames instead of TC", self
         )
-        self.display_layout_left.addRow(toggle_frames_and_tc_button)
+        self.display_layout.addRow(toggle_frames_and_tc_button)
         toggle_frames_and_tc_button.clicked.connect(
             self.controller.toggle_frames_and_tc
         )    
 
-    def _tools_group_elements(self):
+    def _text_tools_group_elements(self):
         """Show elements of the tool group."""
 
         # Edit EDL Title
         edit_edl_title_button = QtWidgets.QPushButton("Edit EDL Title", self)
-        self.tools_layout_left.addRow(edit_edl_title_button)
+        self.tools_layout.addRow(edit_edl_title_button)
         edit_edl_title_button.clicked.connect(self.controller.edit_edl_title)
 
         # Switch Reel and Clip Name Button
         switch_reel_button = QtWidgets.QPushButton(
             "Switch Reel and Clip Name", self
         )
-        self.tools_layout_left.addRow(switch_reel_button)
+        self.tools_layout.addRow(switch_reel_button)
         switch_reel_button.clicked.connect(self.controller.switch_reel)
 
         # Copy Source File to Reel
         copy_source_file_to_reel_button = QtWidgets.QPushButton(
             "Copy Source File to Reel", self
         )
-        self.tools_layout_left.addRow(copy_source_file_to_reel_button)
+        self.tools_layout.addRow(copy_source_file_to_reel_button)
         copy_source_file_to_reel_button.clicked.connect(
             self.controller.copy_source_file_to_reel
         )
@@ -155,7 +169,7 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         remove_reel_ext_button = QtWidgets.QPushButton(
             "Remove extension from Reels", self
         )
-        self.tools_layout_left.addRow(remove_reel_ext_button)
+        self.tools_layout.addRow(remove_reel_ext_button)
         remove_reel_ext_button.clicked.connect(self.controller.remove_reel_ext)
 
         # Batch Edit Reels
@@ -164,11 +178,11 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         append_reels_button = QtWidgets.QPushButton("Append", self)
         replace_reels_button = QtWidgets.QPushButton("Replace", self)
         batch_edit_reels_hbox = QtWidgets.QHBoxLayout()
-        batch_edit_reels_hbox.addWidget(batch_edit_reels_label)
         batch_edit_reels_hbox.addWidget(prepend_reels_button)
         batch_edit_reels_hbox.addWidget(append_reels_button)
         batch_edit_reels_hbox.addWidget(replace_reels_button)
-        self.tools_layout_left.addRow(batch_edit_reels_hbox)
+        self.tools_layout.addRow(batch_edit_reels_label)
+        self.tools_layout.addRow(batch_edit_reels_hbox)
         prepend_reels_button.clicked.connect(self.controller.prepend_reels)
         append_reels_button.clicked.connect(self.controller.append_reels)
         replace_reels_button.clicked.connect(self.controller.replace_reels)
@@ -179,8 +193,8 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         # Save EDL Buttons
         save_edl_button = QtWidgets.QPushButton("Save EDL", self)
         save_edl_as_button = QtWidgets.QPushButton("Save EDL As...", self)
-        self.output_layout_left.addRow(save_edl_button)
-        self.output_layout_left.addRow(save_edl_as_button)
+        self.output_layout.addRow(save_edl_button)
+        self.output_layout.addRow(save_edl_as_button)
         save_edl_button.clicked.connect(self.controller.save_edl)
         save_edl_as_button.clicked.connect(self.controller.save_edl_as)
 
@@ -189,13 +203,25 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         self.cdl_type = QtWidgets.QComboBox(self) 
         cdl_types = [".ccc", ".cc", ".cdl"]
         self.cdl_type.addItems(cdl_types)
-        self.output_layout_left.addRow(export_cdl_button, self.cdl_type)
+        self.output_layout.addRow(export_cdl_button, self.cdl_type)
         export_cdl_button.clicked.connect(self.controller.export_cdl)    
 
     def _edl_group_elements(self):
-        """Show the EDL tablee."""
+        """Show the EDL table."""
         self.edl_view = EdlEditor()
         self.controller.set_up_edl_view()
+
+    def _timecode_tools_group_elements(self):
+        """Show the timecode tools."""
+        set_start_tc_button = QtWidgets.QPushButton("(WIP) Set Start TC", self)
+        remove_gaps_button = QtWidgets.QPushButton("(WIP) Remove Gaps", self)
+        add_handles_button = QtWidgets.QPushButton("(WIP) Add Handles", self)
+        self.timecode_tools_layout.addRow(set_start_tc_button)
+        self.timecode_tools_layout.addRow(remove_gaps_button)
+        self.timecode_tools_layout.addRow(add_handles_button)
+        # remove_gaps_button.clicked.connect(self.controller.remove_gaps)
+        # add_handles_button.clicked.connect(self.controller.add_handles)
+        # set_start_tc_button.clicked.connect(self.controller.set_start_tc)
 
     def run(self, qt_app):
         """Run the QT App.
