@@ -1,11 +1,10 @@
-"""Parse EDL."""
+"""EDL related stuff."""
 
 # Import built-in modules
 import os
 import re
 
 # Import third-party modules
-from edl import Event
 from edl import Parser
 from timecode import Timecode
 
@@ -24,6 +23,7 @@ def parse_edl(edl_path, fps):
         Edl: EDL instance.
 
     """
+    edl = None
     parser = Parser(fps)
     if os.path.isfile(edl_path):
         with open(edl_path) as edl_file:
@@ -36,6 +36,33 @@ def parse_edl(edl_path, fps):
                             event.cdl.set_sop(get_sop(comment))
                         if "ASC_SAT" in comment:
                             event.cdl.set_sat(get_sat(comment))
+    return edl
+
+
+def remove_edl_gaps(edl):
+    """Return EDL without gaps between EDL Events.
+
+    Args:
+        edl (Edl): Edit Decisioon List.
+
+    Return:
+        Edl: Edit Decision list without gaps.
+
+    """
+    for index in range(len(edl.events) - 1):
+        event_rec_end = edl.events[index].rec_end_tc
+        next_event_rec_start = edl.events[index+1].rec_start_tc
+        next_event_rec_end = edl.events[index+1].rec_end_tc
+        diff = next_event_rec_start.frames - event_rec_end.frames
+        if diff > 0:
+            tc_diff = next_event_rec_start - event_rec_end
+            edl.events[index+1].rec_start_tc = next_event_rec_start - tc_diff
+            edl.events[index+1].rec_end_tc = next_event_rec_end - tc_diff
+        # Special case: EDL with incorrect order:
+        if diff < 0:
+            tc_diff = event_rec_end - next_event_rec_start
+            edl.events[index+1].rec_start_tc = next_event_rec_start + tc_diff
+            edl.events[index+1].rec_end_tc = next_event_rec_end + tc_diff
     return edl
 
 

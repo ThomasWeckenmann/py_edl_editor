@@ -9,6 +9,7 @@ from PySide6 import QtWidgets
 
 # Import local modules
 from py_edl_editor.edl_parser import parse_edl
+from py_edl_editor.edl_parser import remove_edl_gaps
 from py_edl_editor.cdl import ccc_xml
 
 FRAMERATES = ["23.98", "24", "25", "29.97", "30", "50", "59.94", "60"]
@@ -183,6 +184,11 @@ class GuiController(object):
                     self._write_file(dest_file_path, cdl.cdl_xml())
                 else:
                     self._write_file(dest_file_path, cdl.cc_xml())
+
+    def remove_gaps(self):
+        """Remove EDL gaps."""
+        self.edl = remove_edl_gaps(self.edl)
+        self._fill_edl_table()
 
     def _fix_event_clip_name_comment(self, event):
         """Update EDL Event comment string that contains the Clip Name.
