@@ -8,6 +8,7 @@ from timecode import Timecode
 
 # Import local modules
 from py_edl_editor.edl_parser import parse_edl
+from py_edl_editor.tc_tools import add_handles_to_edl
 from py_edl_editor.tc_tools import remove_edl_gaps
 from py_edl_editor.tc_tools import set_edl_start_tc
 from py_edl_editor.tc_tools import tc_from_string
@@ -43,3 +44,11 @@ def test_tc_from_string_with_smpte_input():
     input = "00:00:00:10"
     expected = Timecode("24", "00:00:00:10")
     assert tc_from_string("24", input) == expected
+
+def test_add_handles_to_edl():
+    """Returns correctly calculated EDL with added handles."""
+    edl_with_gaps_path = os.path.join(DIRNAME, "files/edl_with_gaps_start0.edl")
+    handles_edl = os.path.join(DIRNAME, "files/edl_with_gaps_start0_plus_handles.edl")
+    test_edl = parse_edl(edl_with_gaps_path, "24")
+    handles_edl = parse_edl(handles_edl, "24")
+    assert handles_edl.to_string() == add_handles_to_edl(test_edl, 8).to_string()

@@ -215,13 +215,13 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         """Show the timecode tools."""
         remove_gaps_button = QtWidgets.QPushButton("Remove Gaps", self)
         set_start_tc_button = QtWidgets.QPushButton("Set Start TC", self)
-        add_handles_button = QtWidgets.QPushButton("(WIP) Add Handles", self)
+        add_handles_button = QtWidgets.QPushButton("Add Handles", self)
         self.timecode_tools_layout.addRow(remove_gaps_button)
         self.timecode_tools_layout.addRow(set_start_tc_button)
         self.timecode_tools_layout.addRow(add_handles_button)
         remove_gaps_button.clicked.connect(self.controller.remove_gaps)
         set_start_tc_button.clicked.connect(self.controller.set_start_tc)
-        # add_handles_button.clicked.connect(self.controller.add_handles)
+        add_handles_button.clicked.connect(self.controller.add_handles)
 
     def run(self, qt_app):
         """Run the QT App.

@@ -10,6 +10,7 @@ from PySide6 import QtWidgets
 # Import local modules
 from py_edl_editor.cdl import ccc_xml
 from py_edl_editor.edl_parser import parse_edl
+from py_edl_editor.tc_tools import add_handles_to_edl
 from py_edl_editor.tc_tools import remove_edl_gaps
 from py_edl_editor.tc_tools import set_edl_start_tc
 
@@ -198,8 +199,17 @@ class GuiController(object):
             "Start TC (either in Frame Numbers or SMPTE TC):"
         )
         if reply[1]:
-            start_tc = reply[0]
-            self.edl = set_edl_start_tc(self.edl, start_tc)
+            self.edl = set_edl_start_tc(self.edl, reply[0])
+            self._fill_edl_table()
+
+    def add_handles(self):
+        """Add handles (user input value) to all edl events."""
+        reply = QtWidgets.QInputDialog.getText(
+            None, "Add Head and Tail Handles",
+            "Number of handles:"
+        )
+        if reply[1]:
+            self.edl = add_handles_to_edl(self.edl, int(reply[0]))
             self._fill_edl_table()
 
     def _fix_event_clip_name_comment(self, event):
