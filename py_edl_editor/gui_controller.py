@@ -8,9 +8,10 @@ import sys
 from PySide6 import QtWidgets
 
 # Import local modules
-from py_edl_editor.edl_parser import parse_edl
-from py_edl_editor.edl_parser import remove_edl_gaps
 from py_edl_editor.cdl import ccc_xml
+from py_edl_editor.edl_parser import parse_edl
+from py_edl_editor.tc_tools import remove_edl_gaps
+from py_edl_editor.tc_tools import set_edl_start_tc
 
 FRAMERATES = ["23.98", "24", "25", "29.97", "30", "50", "59.94", "60"]
 
@@ -189,6 +190,17 @@ class GuiController(object):
         """Remove EDL gaps."""
         self.edl = remove_edl_gaps(self.edl)
         self._fill_edl_table()
+
+    def set_start_tc(self):
+        """Set start TC to user input value."""
+        reply = QtWidgets.QInputDialog.getText(
+            None, "Set EDL Start Timecode",
+            "Start TC (either in Frame Numbers or SMPTE TC):"
+        )
+        if reply[1]:
+            start_tc = reply[0]
+            self.edl = set_edl_start_tc(self.edl, start_tc)
+            self._fill_edl_table()
 
     def _fix_event_clip_name_comment(self, event):
         """Update EDL Event comment string that contains the Clip Name.

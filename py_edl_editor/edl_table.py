@@ -247,6 +247,6 @@ class EdlTable(QtCore.QAbstractTableModel):
 
         """
         if self.show_frames:
-            return str(timecode.frames)
+            return str(timecode.frame_number)
         else:
             return str(timecode)
