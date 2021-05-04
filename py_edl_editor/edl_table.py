@@ -219,7 +219,7 @@ class EdlTable(QtCore.QAbstractTableModel):
         if col == 3:
             return edl_event.source_file
         if col == 4:
-            return str(edl_event.cdl)
+            return self._cdl_string(edl_event.cdl)
         if col == 5:
             src_start = self._timecode_string(edl_event.src_start_tc)
             src_end = self._timecode_string(edl_event.src_end_tc)
@@ -232,6 +232,24 @@ class EdlTable(QtCore.QAbstractTableModel):
             return (edl_event.src_end_tc - edl_event.src_start_tc).frames
         if col == 8:
             return (edl_event.rec_end_tc - edl_event.rec_start_tc).frames
+
+    def _cdl_string(self, cdl):
+        """Return a human readable CDL string.
+
+        Args:
+            edl_event (Edl.event): EDL Event containing CDL values.
+
+        Returns:
+            string: Human readable CDL string.
+
+        """
+        if cdl.has_sat and cdl.has_sop:
+            slope = (" ".join([str(slope) for slope in cdl.slope]))
+            offset = (" ".join([str(offset) for offset in cdl.offset]))
+            power = (" ".join([str(power) for power in cdl.power]))
+            return f"{slope}\n{offset}\n{power}\n{cdl.sat}"
+        else:
+            return "-"
 
     def _timecode_string(self, timecode):
         """Return String representation of the given Timecode instance.

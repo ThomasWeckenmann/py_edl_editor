@@ -120,9 +120,9 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         select_edl_button.clicked.connect(self.controller.open_edl)
 
         # Import CDLs Button
-        import_cdl_button = QtWidgets.QPushButton("(WIP) Import CDLs", self)
+        import_cdl_button = QtWidgets.QPushButton("Import CDLs", self)
         self.input_layout.addRow(import_cdl_button)
-        # import_cdl_button.clicked.connect(self.controller.import_cdl)
+        import_cdl_button.clicked.connect(self.controller.import_cdls)
 
         # Reset changes
         reset_changes_button = QtWidgets.QPushButton("Reset changes", self)

@@ -6,9 +6,11 @@ import sys
 
 # Import third-party modules
 from PySide6 import QtWidgets
+from cdl_convert import collection, write
 
 # Import local modules
-from py_edl_editor.cdl import ccc_xml
+from py_edl_editor.cdl_tools import add_ccc_to_edl
+from py_edl_editor.cdl_tools import add_cdls_to_edl
 from py_edl_editor.edl_parser import parse_edl
 from py_edl_editor.tc_tools import add_handles_to_edl
 from py_edl_editor.tc_tools import remove_edl_gaps
@@ -32,7 +34,6 @@ class GuiController(object):
         self.edl_path = ""
         self.fps = 24
         self.dest_folder = ""
-        super(GuiController, self).__init__()
 
     def set_up_edl_view(self):
         """Set up the the EDL view."""
@@ -66,9 +67,11 @@ class GuiController(object):
 
     def open_edl(self):
         """Open EDL File choseen in a File Dialog."""
-        self.edl_path = QtWidgets.QFileDialog.getOpenFileName(
+        edl_path = QtWidgets.QFileDialog.getOpenFileName(
             caption='Open EDL', dir='.', filter='*.edl'
         )[0]
+        if edl_path:
+            self.edl_path = edl_path
         self.update_edl_view()
 
     def reset_changes(self):
@@ -171,21 +174,43 @@ class GuiController(object):
         self.dest_folder = QtWidgets.QFileDialog.getExistingDirectory(
             caption='Choose folder', dir=self.edl_path
         )
-        cdls = [event.cdl for event in self.edl.events]
-        
+        cdls = []
+        for event in self.edl.events:
+            if event.cdl.has_sop and event.cdl.has_sat:
+                cdls.append(event.cdl)
         if cdl_type == ".ccc":
+            ccc = collection.ColorCollection()
             basename = os.path.split(self.edl_path)[1].split(".")[0]
             filename = f"{basename}.ccc"
-            dest_file_path = os.path.join(self.dest_folder, filename)
-            self._write_file(dest_file_path, ccc_xml(cdls))
+            ccc._file_out = os.path.join(self.dest_folder, filename)
+            ccc.append_children(cdls)
+            write.write_cc(ccc)
         else:
             for cdl in cdls:
-                filename = f"{cdl.event.reel}{cdl_type}"
-                dest_file_path = os.path.join(self.dest_folder, filename)
+                cdl.determine_dest(cdl_type[1:], self.dest_folder)
                 if cdl_type == ".cdl":
-                    self._write_file(dest_file_path, cdl.cdl_xml())
-                else:
-                    self._write_file(dest_file_path, cdl.cc_xml())
+                    write.write_cdl(cdl)
+                if cdl_type == ".cc":
+                    write.write_cc(cdl)
+
+    def import_cdls(self):
+        """Import CDLs and add it to the EDL event comments."""
+        cdl_path = QtWidgets.QFileDialog.getOpenFileName(
+            caption='Open EDL', dir=self.edl_path, filter='*.c*'
+        )[0]
+        cdl_type = os.path.splitext(cdl_path)[1]
+        if cdl_type == ".ccc":
+            add_ccc_to_edl(self.edl, cdl_path)
+        elif cdl_type in [".cdl", ".cc"]:
+            cdl_files = []
+            for file in os.listdir(os.path.dirname(cdl_path)):
+                if file.endswith(cdl_type):
+                    cdl_file = os.path.join(os.path.dirname(cdl_path), file)
+                    cdl_files.append(cdl_file)
+            add_cdls_to_edl(self.edl, cdl_type, cdl_files)
+        else:
+            print("Wrong file type. Supported types: .cdl, .cc, .ccc")
+        self._fill_edl_table()
 
     def remove_gaps(self):
         """Remove EDL gaps."""
