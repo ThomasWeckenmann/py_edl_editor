@@ -37,9 +37,12 @@ class GuiController(object):
 
     def set_up_edl_view(self):
         """Set up the the EDL view."""
-        if len(sys.argv) > 2: 
+        if len(sys.argv) > 1:
             edl_path = sys.argv[1]
-            fps = sys.argv[2]
+            if len(sys.argv) > 2:
+                fps = sys.argv[2]
+            else:
+                fps = "24"
             if os.path.isfile(edl_path):
                 self.edl_path = edl_path
             else:
@@ -50,7 +53,7 @@ class GuiController(object):
                 self.fps = "24"
                 print(f"Framerate invalid. Allowed framerates: {FRAMERATES}")
             self.gui.framerate.setCurrentIndex(FRAMERATES.index(self.fps))
-        self.update_edl_view()
+            self.update_edl_view()
         
     def update_edl_view(self):
         """Update EDL table."""
