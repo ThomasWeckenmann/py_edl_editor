@@ -204,7 +204,16 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         cdl_types = [".ccc", ".cc", ".cdl"]
         self.cdl_type.addItems(cdl_types)
         self.output_layout.addRow(export_cdl_button, self.cdl_type)
-        export_cdl_button.clicked.connect(self.controller.export_cdl)    
+        export_cdl_button.clicked.connect(self.controller.export_cdl)
+
+        # Save Textfile Button
+        export_reels_txt_button = QtWidgets.QPushButton(
+            "Export Reels to Textfile", self
+        )
+        self.output_layout.addRow(export_reels_txt_button)
+        export_reels_txt_button.clicked.connect(
+            self.controller.export_reels_txt
+        )
 
     def _edl_group_elements(self):
         """Show the EDL table."""

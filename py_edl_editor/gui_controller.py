@@ -193,10 +193,20 @@ class GuiController(object):
                 if cdl_type == ".cc":
                     write.write_cc(cdl)
 
+    def export_reels_txt(self):
+        """Export all Reel Names to a textfile."""
+        self.dest_folder = QtWidgets.QFileDialog.getExistingDirectory(
+            caption='Choose folder', dir=self.edl_path
+        )
+        reels = sorted(set([event.reel for event in self.edl.events]))
+        basename = os.path.split(self.edl_path)[1].split(".")[0]
+        file_path = os.path.join(self.dest_folder, f"{basename}.txt")
+        self._write_file(file_path, reels)
+
     def import_cdls(self):
         """Import CDLs and add it to the EDL event comments."""
         cdl_path = QtWidgets.QFileDialog.getOpenFileName(
-            caption='Open EDL', dir=self.edl_path, filter='*.c*'
+            caption='Import CDLs', dir=self.edl_path, filter='*.c*'
         )[0]
         cdl_type = os.path.splitext(cdl_path)[1]
         if cdl_type == ".ccc":
