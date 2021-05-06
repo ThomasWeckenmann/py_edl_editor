@@ -143,7 +143,7 @@ class PyEdlEditorApp(QtWidgets.QWidget):
 
         # Show OTIO Timeline
         show_otio_button = QtWidgets.QPushButton(
-            "Show Timeline", self
+            "Show OTIO Timeline", self
         )
         self.display_layout.addRow(show_otio_button)
         show_otio_button.clicked.connect(self.controller.show_otio_timeline)

@@ -4,6 +4,7 @@ certifi==2020.12.5
 edl==0.1.11
 importlib-metadata==4.0.1
 iniconfig==1.1.1
+OpenTimelineIO==0.13.0
 packaging==20.9
 pluggy==0.13.1
 py==1.10.0

@@ -2,11 +2,12 @@
 
 # Import built-in modules
 import os
+import subprocess
 import sys
 
 # Import third-party modules
 from cdl_convert import collection, write
-# import opentimelineio as otio
+import opentimelineio as otio
 from PySide2 import QtWidgets
 
 # Import local modules
@@ -264,8 +265,7 @@ class GuiController(object):
             self._fill_edl_table()
 
     def show_otio_timeline(self):
-        timeline = otio.adapters.read_from_file(self.edl_path)
-        otioview(self.edl_path)
+        subprocess.Popen(["otioview", "{0}".format(self.edl_path)])
 
     def _fix_event_clip_name_comment(self, event):
         """Update EDL Event comment string that contains the Clip Name.

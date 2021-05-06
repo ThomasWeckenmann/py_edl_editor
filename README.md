@@ -11,11 +11,20 @@ Work in progress, so collaboration welcome.
 
 ![py_edl_editor](py_edl_editor_gui.png?raw=true)
 
-Usage without EDL::
+Reqirements:
+
+    pip install PySide2
+    pip install cdl_convert
+    pip intsall opentimelineio
+    pip install timecode
+    pip install edl
+
+
+Usage without EDL:
 
     python __main__.py
 
-Usage with EDL::
+Usage with EDL:
 
     python __main__.py [path_to_edl] [framerate]
     python __main__.py path_to_edl.edl 24
