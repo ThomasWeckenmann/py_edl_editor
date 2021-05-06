@@ -99,6 +99,16 @@ class GuiController(object):
             self._fix_event_clip_name_comment(event)
         self._fill_edl_table()
 
+    def switch_reel_and_loc(self):
+        """Switch EDL Reel and EDL Locator Name."""
+        for event in self.edl.events:
+            if event.has_locator:
+                reel = event.reel
+                event.reel = event.loc_name.replace(" ", "")
+                event.loc_name = reel
+                self._fix_event_locator_comment(event)
+        self._fill_edl_table()
+
     def copy_source_file_to_reel(self):
         """Copy Source File to Reel."""
         for event in self.edl.events:
@@ -262,7 +272,25 @@ class GuiController(object):
         """
         for index, comment in enumerate(event.comments):
             if "* FROM CLIP NAME:" in comment:
-                event.comments[index] = f"* FROM CLIP NAME: {event.clip_name}"
+                event.comments[index] = "* FROM CLIP NAME: {0}".format(
+                    event.clip_name
+                )
+
+    def _fix_event_locator_comment(self, event):
+        """Update EDL Event comment string that contains the Locator.
+
+        When updating the clip_name value, the comment is not updated. But since
+        we want to export the EDL, we need to update the comment.
+
+        Args:
+            event (Edl.event):  EDL Event instance.
+
+        """
+        for index, comment in enumerate(event.comments):
+            if "* LOC:" in comment:
+                event.comments[index] = "* LOC: {0} {1} {2}".format(
+                    event.loc_tc, event.loc_color, event.loc_name
+                )
 
     def _write_file(self, dest_file_path, lines):
         """Write the givem lines to a text file."""

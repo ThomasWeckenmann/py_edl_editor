@@ -29,7 +29,7 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         self.controller = GuiController(self)
         self.setWindowTitle("EDL Editor")
         self.setMinimumWidth(1500)
-        self.setMinimumHeight(600)
+        self.setMinimumHeight(800)
 
         # Set up main box layouts
         layout = QtWidgets.QHBoxLayout()
@@ -155,6 +155,15 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         )
         self.tools_layout.addRow(switch_reel_button)
         switch_reel_button.clicked.connect(self.controller.switch_reel)
+
+        # Switch Reel and Locator Name Button
+        switch_reel_loc_button = QtWidgets.QPushButton(
+            "Switch Reel and Locator Name", self
+        )
+        self.tools_layout.addRow(switch_reel_loc_button)
+        switch_reel_loc_button.clicked.connect(
+            self.controller.switch_reel_and_loc
+        )
 
         # Copy Source File to Reel
         copy_source_file_to_reel_button = QtWidgets.QPushButton(

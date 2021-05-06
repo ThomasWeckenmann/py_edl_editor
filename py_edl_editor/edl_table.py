@@ -59,6 +59,7 @@ class EdlTable(QtCore.QAbstractTableModel):
         "Clip Name",
         "Source File",
         "CDL",
+        "Locator",
         "Source TC In\nSource TC Out",
         "Rec TC In\nRec TC Out",
         "Source\nDuration",
@@ -139,11 +140,11 @@ class EdlTable(QtCore.QAbstractTableModel):
         if role == QtCore.Qt.DisplayRole:
             return self._return_items_role_data(index)
         
-        if role == QtCore.Qt.FontRole and index.column() == 4:
+        if role == QtCore.Qt.FontRole and index.column() in [4, 5]:
             return QtGui.QFont('Courier', 10)
         
-        if role == QtCore.Qt.FontRole and index.column() in [5, 6, 7, 8]:
-            return QtGui.QFont('Courier', 13)
+        if role == QtCore.Qt.FontRole and index.column() in [6, 7, 8, 9]:
+            return QtGui.QFont('Courier', 12)
 
     def setData(self, index, value, role):
         """Set the role data for the item at index to value.
@@ -221,23 +222,25 @@ class EdlTable(QtCore.QAbstractTableModel):
         if col == 4:
             return self._cdl_string(edl_event.cdl)
         if col == 5:
+            return self._locator_string(edl_event)
+        if col == 6:
             src_start = self._timecode_string(edl_event.src_start_tc)
             src_end = self._timecode_string(edl_event.src_end_tc)
             return f"{src_start}\n{src_end}"
-        if col == 6:
+        if col == 7:
             rec_start = self._timecode_string(edl_event.rec_start_tc)
             rec_end = self._timecode_string(edl_event.rec_end_tc)
             return f"{rec_start}\n{rec_end}"
-        if col == 7:
-            return (edl_event.src_end_tc - edl_event.src_start_tc).frames
         if col == 8:
+            return (edl_event.src_end_tc - edl_event.src_start_tc).frames
+        if col == 9:
             return (edl_event.rec_end_tc - edl_event.rec_start_tc).frames
 
     def _cdl_string(self, cdl):
         """Return a human readable CDL string.
 
         Args:
-            edl_event (Edl.event): EDL Event containing CDL values.
+            cdl (cdl_convert.Correction): CDL instance.
 
         Returns:
             string: Human readable CDL string.
@@ -248,6 +251,23 @@ class EdlTable(QtCore.QAbstractTableModel):
             offset = (" ".join([str(offset) for offset in cdl.offset]))
             power = (" ".join([str(power) for power in cdl.power]))
             return f"{slope}\n{offset}\n{power}\n{cdl.sat}"
+        else:
+            return "-"
+
+    def _locator_string(self, event):
+        """Return a human readable Avid Lcator string.
+
+        Args:
+            edl_event (Edl.event): EDL Event containing the locator values.
+
+        Returns:
+            string: Human readable Avid Locator string.
+
+        """
+        if event.has_locator:
+            return("{0}\n{1}\n{2}".format(
+                event.loc_tc, event.loc_color, event.loc_name)
+            )
         else:
             return "-"
 
