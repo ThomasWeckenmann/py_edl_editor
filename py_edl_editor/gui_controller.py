@@ -94,7 +94,7 @@ class GuiController(object):
         """Switch EDL Reel and EDL Clip Name."""
         for event in self.edl.events:
             reel = event.reel
-            event.reel = event.clip_name
+            event.reel = event.clip_name.replace(" ", "")
             event.clip_name = reel
             self._fix_event_clip_name_comment(event)
         self._fill_edl_table()

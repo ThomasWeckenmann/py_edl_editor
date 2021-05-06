@@ -32,9 +32,9 @@ def parse_edl(edl_path, fps):
                 if event.comments:
                     for comment in event.comments:
                         if "ASC_SOP" in comment:
-                            event.cdl = add_sop(event.cdl, comment)
+                            add_sop(event.cdl, comment)
                         if "ASC_SAT" in comment:
-                            event.cdl.sat = get_sat(comment)
+                            add_sat(event.cdl, comment)
     return edl
 
 
@@ -44,9 +44,6 @@ def add_sop(cdl, comment):
     Args:
         cdl (cdl_convert.Correction): Correction instance (Color Decision List).
         comment (str): EDL Event comment containing the SOP values.
-
-    Returns:
-        Correction: cdl_convert Correction instance with added SOP values.
 
     """
     # https://regex101.com/r/3F8NQd/1
@@ -66,18 +63,15 @@ def add_sop(cdl, comment):
     cdl.slope = (sop["slope_red"], sop["slope_green"], sop["slope_blue"])
     cdl.offset = (sop["offset_red"], sop["offset_green"], sop["offset_blue"])
     cdl.power = (sop["power_red"], sop["power_green"], sop["power_blue"])
-    return cdl
     
 
-def get_sat(comment):
+def add_sat(cdl, comment):
     """Return the events SAT value.
 
     Args:
+        cdl (cdl_convert.Correction): Correction instance (Color Decision List).
         comment (str): EDL Event comment containing the SAT value.
-
-    Returns:
-        string: SAT value.
 
     """
     sat_filter = r"[*]\s?ASC_SAT\s?\s?(?P<saturation>[-]?\d+([.]\d+)?)"
-    return re.search(sat_filter, comment).groupdict()["saturation"]
+    cdl.sat = re.search(sat_filter, comment).groupdict()["saturation"]
