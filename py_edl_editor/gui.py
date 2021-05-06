@@ -4,8 +4,8 @@
 import sys
 
 # Import third-party modules
-from PySide6 import QtCore  
-from PySide6 import QtWidgets
+from PySide2 import QtCore
+from PySide2 import QtWidgets
 
 # Import local modules
 from py_edl_editor.edl_table import EdlTable
@@ -140,6 +140,13 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         toggle_frames_and_tc_button.clicked.connect(
             self.controller.toggle_frames_and_tc
         )    
+
+        # Show OTIO Timeline
+        show_otio_button = QtWidgets.QPushButton(
+            "Show Timeline", self
+        )
+        self.display_layout.addRow(show_otio_button)
+        show_otio_button.clicked.connect(self.controller.show_otio_timeline)
 
     def _text_tools_group_elements(self):
         """Show elements of the tool group."""

@@ -73,12 +73,12 @@ def tc_from_string(framerate, start_tc):
     new_start_tc = None
     try:
         frames = int(start_tc)
-        new_start_tc = Timecode(framerate, f"00:00:00:{frames}")
+        new_start_tc = Timecode(framerate, "00:00:00:{0}".format(frames))
     except ValueError:
         try:
             new_start_tc = Timecode(framerate, start_tc)
         except:
-            print(f"Wrong Timcode format: {start_tc}")
+            print("Wrong Timcode format: {0}".format(start_tc))
     return new_start_tc
 
 

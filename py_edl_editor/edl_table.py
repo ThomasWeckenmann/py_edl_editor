@@ -1,9 +1,9 @@
 """Models for the QT Table View."""
 
 # Import third-party modules
-from PySide6 import QtCore
-from PySide6 import QtGui
-from PySide6 import QtWidgets
+from PySide2 import QtCore
+from PySide2 import QtGui
+from PySide2 import QtWidgets
 
 
 class ReelDelegate(QtWidgets.QItemDelegate):
@@ -226,11 +226,11 @@ class EdlTable(QtCore.QAbstractTableModel):
         if col == 6:
             src_start = self._timecode_string(edl_event.src_start_tc)
             src_end = self._timecode_string(edl_event.src_end_tc)
-            return f"{src_start}\n{src_end}"
+            return "{0}\n{1}".format(src_start, src_end)
         if col == 7:
             rec_start = self._timecode_string(edl_event.rec_start_tc)
             rec_end = self._timecode_string(edl_event.rec_end_tc)
-            return f"{rec_start}\n{rec_end}"
+            return "{0}\n{1}".format(rec_start, rec_end)
         if col == 8:
             return (edl_event.src_end_tc - edl_event.src_start_tc).frames
         if col == 9:
@@ -250,7 +250,7 @@ class EdlTable(QtCore.QAbstractTableModel):
             slope = (" ".join([str(slope) for slope in cdl.slope]))
             offset = (" ".join([str(offset) for offset in cdl.offset]))
             power = (" ".join([str(power) for power in cdl.power]))
-            return f"{slope}\n{offset}\n{power}\n{cdl.sat}"
+            return "{0}\n{1}\n{2}\n{3}".format(slope, offset, power, cdl.sat)
         else:
             return "-"
 

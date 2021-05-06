@@ -5,8 +5,9 @@ import os
 import sys
 
 # Import third-party modules
-from PySide6 import QtWidgets
 from cdl_convert import collection, write
+# import opentimelineio as otio
+from PySide2 import QtWidgets
 
 # Import local modules
 from py_edl_editor.cdl_tools import add_ccc_to_edl
@@ -51,14 +52,16 @@ class GuiController(object):
                 self.fps = fps
             else:
                 self.fps = "24"
-                print(f"Framerate invalid. Allowed framerates: {FRAMERATES}")
+                print("Framerate invalid. Allowed framerates: {0}".format(
+                    FRAMERATES)
+                )
             self.gui.framerate.setCurrentIndex(FRAMERATES.index(self.fps))
             self.update_edl_view()
         
     def update_edl_view(self):
         """Update EDL table."""
         self.gui.setWindowTitle(
-            f"EDL Editor [{os.path.split(self.edl_path)[1]}]"
+            "EDL Editor [{0}]".format(os.path.split(self.edl_path)[1])
         )
         self._set_edl()
         self._fill_edl_table()
@@ -88,7 +91,7 @@ class GuiController(object):
         )
         if reply[1]:
             self.edl.title = reply[0]
-        self.gui.edl_title.setText(f"EDL Title: {self.edl.title}")
+        self.gui.edl_title.setText("EDL Title: {0}".format(self.edl.title))
 
     def switch_reel(self):
         """Switch EDL Reel and EDL Clip Name."""
@@ -129,7 +132,7 @@ class GuiController(object):
         if reply[1]:
             text = reply[0]
             for event in self.edl.events:
-                event.reel = f"{text}{event.reel}"
+                event.reel = "{0}{1}".format(text, event.reel)
         self._fill_edl_table()
 
     def append_reels(self):
@@ -140,7 +143,7 @@ class GuiController(object):
         if reply[1]:
             text = reply[0]
             for event in self.edl.events:
-                event.reel = f"{event.reel}{text}"
+                event.reel = "{0}{1}".format(event.reel, text)
         self._fill_edl_table()
 
     def replace_reels(self):
@@ -194,7 +197,7 @@ class GuiController(object):
         if cdl_type == ".ccc":
             ccc = collection.ColorCollection()
             basename = os.path.split(self.edl_path)[1].split(".")[0]
-            filename = f"{basename}.ccc"
+            filename = "{0}.ccc".format(basename)
             ccc._file_out = os.path.join(self.dest_folder, filename)
             ccc.append_children(cdls)
             write.write_cc(ccc)
@@ -213,7 +216,7 @@ class GuiController(object):
         )
         reels = sorted(set([event.reel for event in self.edl.events]))
         basename = os.path.split(self.edl_path)[1].split(".")[0]
-        file_path = os.path.join(self.dest_folder, f"{basename}.txt")
+        file_path = os.path.join(self.dest_folder, "{0}.txt".format(basename))
         self._write_file(file_path, reels)
 
     def import_cdls(self):
@@ -260,6 +263,10 @@ class GuiController(object):
             self.edl = add_handles_to_edl(self.edl, int(reply[0]))
             self._fill_edl_table()
 
+    def show_otio_timeline(self):
+        timeline = otio.adapters.read_from_file(self.edl_path)
+        otioview(self.edl_path)
+
     def _fix_event_clip_name_comment(self, event):
         """Update EDL Event comment string that contains the Clip Name.
 
@@ -296,12 +303,12 @@ class GuiController(object):
         """Write the givem lines to a text file."""
         with open(dest_file_path, 'w') as text_file:
             for line in lines:
-                text_file.write(f"{line}\n")
+                text_file.write("{0}\n".format(line))
 
     def _set_edl(self):
         """Parse and set the EDL."""
         self.edl = parse_edl(self.edl_path, self.fps)
-        self.gui.edl_title.setText(f"EDL Title: {self.edl.title}")
+        self.gui.edl_title.setText("EDL Title: {0}".format(self.edl.title))
 
     def _fill_edl_table(self):
         """Fill the EDL view with edl table events."""

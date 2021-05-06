@@ -68,8 +68,8 @@ def _add_edl_cdl_comments(event):
     slope = (" ".join([str(slope) for slope in event.cdl.slope]))
     offset = (" ".join([str(offset) for offset in event.cdl.offset]))
     power = (" ".join([str(power) for power in event.cdl.power]))
-    sop = f"* ASC_SOP ({slope})({offset})({power})"
-    sat = f"* ASC_SAT {event.cdl.sat}"
+    sop = "* ASC_SOP ({0})({1})({2})".format(slope, offset, power)
+    sat = "* ASC_SAT {0}".format(event.cdl.sat)
     event.comments.append(sop)
     event.comments.append(sat)
 
