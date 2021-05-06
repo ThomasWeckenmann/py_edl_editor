@@ -15,7 +15,7 @@ Reqirements:
 
     pip install PySide2
     pip install cdl_convert
-    pip intsall opentimelineio
+    pip install opentimelineio
     pip install timecode
     pip install edl
 
