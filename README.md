@@ -22,12 +22,12 @@ Requirements:
 
 Usage without EDL:
 
-    python __main__.py
+    python edl_editor.py
 
 Usage with EDL:
 
-    python __main__.py [path_to_edl] [framerate]
-    python __main__.py path_to_edl.edl 24
+    python edl_editor.py [path_to_edl] [framerate]
+    python edl_editor.py path_to_edl.edl 24
 
 Accepted framerate values ['60', '59.94', '50', '30', '29.97', '25', '24',
 '23.98'].
