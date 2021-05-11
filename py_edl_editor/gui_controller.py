@@ -6,8 +6,8 @@ import subprocess
 import sys
 
 # Import third-party modules
+# pylint: disable=import-error
 from cdl_convert import collection, write
-import opentimelineio as otio
 from PySide2 import QtWidgets
 
 # Import local modules
@@ -21,7 +21,8 @@ from py_edl_editor.tc_tools import set_edl_start_tc
 FRAMERATES = ["23.98", "24", "25", "29.97", "30", "50", "59.94", "60"]
 
 
-class GuiController(object):
+# pylint: disable=too-many-public-methods
+class GuiController:
     """Main class for GuiController."""
 
     def __init__(self, gui):
@@ -53,12 +54,15 @@ class GuiController(object):
                 self.fps = fps
             else:
                 self.fps = "24"
-                print("Framerate invalid. Allowed framerates: {0}".format(
-                    FRAMERATES)
+                print(
+                    "{0} {1}".format(
+                        "Framerate invalid. Allowed framerates:",
+                        FRAMERATES,
+                    )
                 )
             self.gui.framerate.setCurrentIndex(FRAMERATES.index(self.fps))
             self.update_edl_view()
-        
+
     def update_edl_view(self):
         """Update EDL table."""
         self.gui.setWindowTitle(
@@ -75,7 +79,7 @@ class GuiController(object):
     def open_edl(self):
         """Open EDL File choseen in a File Dialog."""
         edl_path = QtWidgets.QFileDialog.getOpenFileName(
-            caption='Open EDL', dir='.', filter='*.edl'
+            caption="Open EDL", dir=".", filter="*.edl"
         )[0]
         if edl_path:
             self.edl_path = edl_path
@@ -128,7 +132,7 @@ class GuiController(object):
     def prepend_reels(self):
         """Prepend all reel names with user input string."""
         reply = QtWidgets.QInputDialog.getText(
-            None, "Batch Edit Reels | Prepend String", "String to be prepended:"
+            None, "Batch Edit Reels: Prepend String", "String to be prepended:"
         )
         if reply[1]:
             text = reply[0]
@@ -139,7 +143,7 @@ class GuiController(object):
     def append_reels(self):
         """Append user input string to all reel names."""
         reply = QtWidgets.QInputDialog.getText(
-            None, "Batch Edit Reels | Append String", "String to be appended:"
+            None, "Batch Edit Reels: Append String", "String to be appended:"
         )
         if reply[1]:
             text = reply[0]
@@ -156,10 +160,10 @@ class GuiController(object):
                 "String to be replaced followed by replacement string ",
                 "(divided by comma)",
                 "Example: 'old_value, new_value'",
-            )
+            ),
         )
         if reply[1]:
-            old_value, new_value = reply[0].split(',')
+            old_value, new_value = reply[0].split(",")
             for event in self.edl.events:
                 event.reel = event.reel.replace(old_value, new_value.strip())
         self._fill_edl_table()
@@ -179,7 +183,7 @@ class GuiController(object):
     def save_edl_as(self):
         """Save EDL to user specified file path."""
         dest_file_path = QtWidgets.QFileDialog.getSaveFileName(
-            caption='Save File As...', dir=self.edl_path
+            caption="Save File As...", dir=self.edl_path
         )[0]
         self._write_file(dest_file_path, [self.edl.to_string()])
         self.edl_path = dest_file_path
@@ -189,7 +193,7 @@ class GuiController(object):
         """Export CDLs as textfiles. CDL type based on GUI dropdown."""
         cdl_type = self.gui.cdl_type.currentText()
         self.dest_folder = QtWidgets.QFileDialog.getExistingDirectory(
-            caption='Choose folder', dir=self.edl_path
+            caption="Choose folder", dir=self.edl_path
         )
         cdls = []
         for event in self.edl.events:
@@ -199,6 +203,7 @@ class GuiController(object):
             ccc = collection.ColorCollection()
             basename = os.path.split(self.edl_path)[1].split(".")[0]
             filename = "{0}.ccc".format(basename)
+            # pylint: disable=protected-access
             ccc._file_out = os.path.join(self.dest_folder, filename)
             ccc.append_children(cdls)
             write.write_cc(ccc)
@@ -213,8 +218,9 @@ class GuiController(object):
     def export_reels_txt(self):
         """Export all Reel Names to a textfile."""
         self.dest_folder = QtWidgets.QFileDialog.getExistingDirectory(
-            caption='Choose folder', dir=self.edl_path
+            caption="Choose folder", dir=self.edl_path
         )
+        # pylint: disable=consider-using-set-comprehension
         reels = sorted(set([event.reel for event in self.edl.events]))
         basename = os.path.split(self.edl_path)[1].split(".")[0]
         file_path = os.path.join(self.dest_folder, "{0}.txt".format(basename))
@@ -223,7 +229,7 @@ class GuiController(object):
     def import_cdls(self):
         """Import CDLs and add it to the EDL event comments."""
         cdl_path = QtWidgets.QFileDialog.getOpenFileName(
-            caption='Import CDLs', dir=self.edl_path, filter='*.c*'
+            caption="Import CDLs", dir=self.edl_path, filter="*.c*"
         )[0]
         cdl_type = os.path.splitext(cdl_path)[1]
         if cdl_type == ".ccc":
@@ -247,8 +253,9 @@ class GuiController(object):
     def set_start_tc(self):
         """Set start TC to user input value."""
         reply = QtWidgets.QInputDialog.getText(
-            None, "Set EDL Start Timecode",
-            "Start TC (either in Frame Numbers or SMPTE TC):"
+            None,
+            "Set EDL Start Timecode",
+            "Start TC (either in Frame Numbers or SMPTE TC):",
         )
         if reply[1]:
             self.edl = set_edl_start_tc(self.edl, reply[0])
@@ -257,53 +264,15 @@ class GuiController(object):
     def add_handles(self):
         """Add handles (user input value) to all edl events."""
         reply = QtWidgets.QInputDialog.getText(
-            None, "Add Head and Tail Handles",
-            "Number of handles:"
+            None, "Add Head and Tail Handles", "Number of handles:"
         )
         if reply[1]:
             self.edl = add_handles_to_edl(self.edl, int(reply[0]))
             self._fill_edl_table()
 
     def show_otio_timeline(self):
+        """Open EDL as open timeline io view."""
         subprocess.Popen(["otioview", "{0}".format(self.edl_path)])
-
-    def _fix_event_clip_name_comment(self, event):
-        """Update EDL Event comment string that contains the Clip Name.
-
-        When updating the clip_name value, the comment is not updated. But since
-        we want to export the EDL, we need to update the comment.
-
-        Args:
-            event (Edl.event):  EDL Event instance.
-
-        """
-        for index, comment in enumerate(event.comments):
-            if "* FROM CLIP NAME:" in comment:
-                event.comments[index] = "* FROM CLIP NAME: {0}".format(
-                    event.clip_name
-                )
-
-    def _fix_event_locator_comment(self, event):
-        """Update EDL Event comment string that contains the Locator.
-
-        When updating the clip_name value, the comment is not updated. But since
-        we want to export the EDL, we need to update the comment.
-
-        Args:
-            event (Edl.event):  EDL Event instance.
-
-        """
-        for index, comment in enumerate(event.comments):
-            if "* LOC:" in comment:
-                event.comments[index] = "* LOC: {0} {1} {2}".format(
-                    event.loc_tc, event.loc_color, event.loc_name
-                )
-
-    def _write_file(self, dest_file_path, lines):
-        """Write the givem lines to a text file."""
-        with open(dest_file_path, 'w') as text_file:
-            for line in lines:
-                text_file.write("{0}\n".format(line))
 
     def _set_edl(self):
         """Parse and set the EDL."""
@@ -317,3 +286,44 @@ class GuiController(object):
             self.gui.edl_view.edl_table.add_edl_table_event(event)
         self.gui.edl_view.table.resizeColumnsToContents()
         self.gui.edl_view.table.resizeRowsToContents()
+
+    @classmethod
+    def _fix_event_clip_name_comment(cls, event):
+        """Update EDL Event comment string that contains the Clip Name.
+
+        When updating the clip_name value, the comment is not updated. But
+        since we want to export the EDL, we need to update the comment.
+
+        Args:
+            event (Edl.event):  EDL Event instance.
+
+        """
+        for index, comment in enumerate(event.comments):
+            if "* FROM CLIP NAME:" in comment:
+                event.comments[index] = "{0} {1}".format(
+                    "* FROM CLIP NAME:", event.clip_name
+                )
+
+    @classmethod
+    def _fix_event_locator_comment(cls, event):
+        """Update EDL Event comment string that contains the Locator.
+
+        When updating the clip_name value, the comment is not updated. But
+        since we want to export the EDL, we need to update the comment.
+
+        Args:
+            event (Edl.event):  EDL Event instance.
+
+        """
+        for index, comment in enumerate(event.comments):
+            if "* LOC:" in comment:
+                event.comments[index] = "* LOC: {0} {1} {2}".format(
+                    event.loc_tc, event.loc_color, event.loc_name
+                )
+
+    @classmethod
+    def _write_file(cls, dest_file_path, lines):
+        """Write the givem lines to a text file."""
+        with open(dest_file_path, "w") as text_file:
+            for line in lines:
+                text_file.write("{0}\n".format(line))

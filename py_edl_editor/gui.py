@@ -4,17 +4,20 @@
 import sys
 
 # Import third-party modules
+# pylint: disable=import-error
 from PySide2 import QtCore
 from PySide2 import QtWidgets
 
 # Import local modules
 from py_edl_editor.edl_table import EdlTable
-from py_edl_editor.edl_table import ReelDelegate
+from py_edl_editor.edl_table import EditableDelegate
 from py_edl_editor.gui_controller import GuiController
 from py_edl_editor.gui_controller import FRAMERATES
 
 
-class PyEdlEditorApp(QtWidgets.QWidget):  
+# pylint: disable=too-many-instance-attributes,too-many-locals
+# pylint: disable=too-many-statements,too-few-public-methods
+class PyEdlEditorApp(QtWidgets.QWidget):
     """Main Class for the GUI."""
 
     def __init__(self, qt_app):
@@ -44,14 +47,14 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         self.edl_table_layout = QtWidgets.QFormLayout()
         self.display_layout = QtWidgets.QFormLayout()
         self.timecode_tools_layout = QtWidgets.QFormLayout()
-        
+
         # Set up group boxes on the left
         input_group_box = QtWidgets.QGroupBox("Input")
         display_group_box = QtWidgets.QGroupBox("Display")
         text_tools_group_box = QtWidgets.QGroupBox("Text Tools")
         output_group_box = QtWidgets.QGroupBox("Output")
         timecode_tools_group_box = QtWidgets.QGroupBox("Timecode Tools")
-        
+
         # Show group boxes
         self._input_group_elements()
         self._display_group_elements()
@@ -59,14 +62,14 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         self._output_group_elements()
         self._edl_group_elements()
         self._timecode_tools_group_elements()
-        
+
         # Set up vbox layouts
         input_vbox = QtWidgets.QVBoxLayout()
         display_vbox = QtWidgets.QVBoxLayout()
         text_tools_vbox = QtWidgets.QVBoxLayout()
         output_vbox = QtWidgets.QVBoxLayout()
         timecode_tools_vbox = QtWidgets.QVBoxLayout()
-        
+
         # Add layouts to the box layouts
         input_vbox.addLayout(self.input_layout)
         display_vbox.addLayout(self.display_layout)
@@ -88,7 +91,7 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         layout_middle.addWidget(self.edl_view)
         layout_right.addWidget(display_group_box)
         layout_right.addWidget(timecode_tools_group_box)
-        
+
         # Set up main layout
         layout.addLayout(layout_left)
         layout.addLayout(layout_middle)
@@ -104,13 +107,13 @@ class PyEdlEditorApp(QtWidgets.QWidget):
 
         # FPS Dropdown
         framerate_label = QtWidgets.QLabel("FPS:", self)
-        self.framerate = QtWidgets.QComboBox(self) 
+        self.framerate = QtWidgets.QComboBox(self)
         self.framerates = FRAMERATES
         self.framerate.addItems(self.framerates)
         self.input_layout.addRow(framerate_label, self.framerate)
         self.framerate.currentIndexChanged.connect(
             self.controller.update_framerate
-        )
+        )  # noqa: E501
 
         # Open EDL Button
         select_edl_button_box = QtWidgets.QHBoxLayout()
@@ -139,12 +142,10 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         self.display_layout.addRow(toggle_frames_and_tc_button)
         toggle_frames_and_tc_button.clicked.connect(
             self.controller.toggle_frames_and_tc
-        )    
+        )
 
         # Show OTIO Timeline
-        show_otio_button = QtWidgets.QPushButton(
-            "Show OTIO Timeline", self
-        )
+        show_otio_button = QtWidgets.QPushButton("Show OTIO Timeline", self)
         self.display_layout.addRow(show_otio_button)
         show_otio_button.clicked.connect(self.controller.show_otio_timeline)
 
@@ -159,7 +160,7 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         # Switch Reel and Clip Name Button
         switch_reel_button = QtWidgets.QPushButton(
             "Switch Reel and Clip Name", self
-        )
+        )  # noqa: E501
         self.tools_layout.addRow(switch_reel_button)
         switch_reel_button.clicked.connect(self.controller.switch_reel)
 
@@ -170,7 +171,7 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         self.tools_layout.addRow(switch_reel_loc_button)
         switch_reel_loc_button.clicked.connect(
             self.controller.switch_reel_and_loc
-        )
+        )  # noqa: E501
 
         # Copy Source File to Reel
         copy_source_file_to_reel_button = QtWidgets.QPushButton(
@@ -216,7 +217,7 @@ class PyEdlEditorApp(QtWidgets.QWidget):
 
         # Export CDL
         export_cdl_button = QtWidgets.QPushButton("Export CDLs", self)
-        self.cdl_type = QtWidgets.QComboBox(self) 
+        self.cdl_type = QtWidgets.QComboBox(self)
         cdl_types = [".ccc", ".cc", ".cdl"]
         self.cdl_type.addItems(cdl_types)
         self.output_layout.addRow(export_cdl_button, self.cdl_type)
@@ -229,7 +230,7 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         self.output_layout.addRow(export_reels_txt_button)
         export_reels_txt_button.clicked.connect(
             self.controller.export_reels_txt
-        )
+        )  # noqa: E501
 
     def _edl_group_elements(self):
         """Show the EDL table."""
@@ -258,9 +259,11 @@ class PyEdlEditorApp(QtWidgets.QWidget):
         self.show()
         qt_app.exec_()
 
+
 class EdlEditor(QtWidgets.QWidget):
     """View element containing the EDL table."""
 
+    # pylint: disable=super-with-arguments
     def __init__(self):
         """Initialize the EdlEditor instance."""
         super(EdlEditor, self).__init__()
@@ -272,8 +275,8 @@ class EdlEditor(QtWidgets.QWidget):
         self.table.horizontalHeader().setStretchLastSection(True)
         self.table.setModel(asset_model)
         self.table.verticalHeader().hide()
-        self.table.setItemDelegateForColumn(1, ReelDelegate(self.table))
-        self.table.setItemDelegateForColumn(2, ReelDelegate(self.table))
+        self.table.setItemDelegateForColumn(1, EditableDelegate(self.table))
+        self.table.setItemDelegateForColumn(2, EditableDelegate(self.table))
         self.edl_table = self.table.model().sourceModel()
 
         main_layout = QtWidgets.QVBoxLayout()
@@ -281,7 +284,7 @@ class EdlEditor(QtWidgets.QWidget):
         self.setLayout(main_layout)
 
 
-class PyEdlEditorGui(object):
+class PyEdlEditorGui:
     """Construct QApplication used for the GUI."""
 
     def __init__(self):

@@ -1,7 +1,7 @@
 """ ``py_edl_editor`` Module
 This is the main py_edl_editor module.
-py_edl_editor is a python EDL (Edit Decision List) GUI, based on the EDL library
-by Simon Hargreaves https://pypi.org/project/edl/ which is using 
+py_edl_editor is a python EDL (Edit Decision List) GUI, based on the EDL
+library by Simon Hargreaves https://pypi.org/project/edl/ which is using
 [pytimecode](https://code.google.com/p/pytimecode/).
 Also using the cdl_convert library by Sean Wallitsch:
 https://github.com/shidarin/cdl_convert

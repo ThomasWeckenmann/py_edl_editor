@@ -5,6 +5,7 @@ import os
 import re
 
 # Import third-party modules
+# pylint: disable=import-error
 from edl import Parser
 from cdl_convert import correction
 
@@ -27,7 +28,7 @@ def parse_edl(edl_path, fps):
     if os.path.isfile(edl_path):
         with open(edl_path) as edl_file:
             edl = parser.parse(edl_file)
-            for i, event in enumerate(edl.events):
+            for event in edl.events:
                 event.cdl = correction.ColorCorrection(event.reel)
                 event.has_locator = False
                 if event.comments:
@@ -45,7 +46,7 @@ def add_sop(cdl, comment):
     """Add SOP values to the cdl instance.
 
     Args:
-        cdl (cdl_convert.Correction): Correction instance (Color Decision List).
+        cdl (cdl_convert.Correction): Correction instance.
         comment (str): EDL Event comment containing the SOP values.
 
     """
@@ -66,13 +67,13 @@ def add_sop(cdl, comment):
     cdl.slope = (sop["slope_red"], sop["slope_green"], sop["slope_blue"])
     cdl.offset = (sop["offset_red"], sop["offset_green"], sop["offset_blue"])
     cdl.power = (sop["power_red"], sop["power_green"], sop["power_blue"])
-    
+
 
 def add_sat(cdl, comment):
     """Add SAT values to the cdl instance.
 
     Args:
-        cdl (cdl_convert.Correction): Correction instance (Color Decision List).
+        cdl (cdl_convert.Correction): Correction instance.
         comment (str): EDL Event comment containing the SAT value.
 
     """
@@ -101,5 +102,5 @@ def add_avid_locator(event, comment):
         event.loc_color = locator_dict["color"]
         event.loc_name = locator_dict["name"]
         event.has_locator = True
-    except:
+    except AttributeError:
         pass

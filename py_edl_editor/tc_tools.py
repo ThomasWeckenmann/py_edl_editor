@@ -16,18 +16,18 @@ def remove_edl_gaps(edl):
     """
     for index in range(len(edl.events) - 1):
         event_rec_end = edl.events[index].rec_end_tc
-        next_event_rec_start = edl.events[index+1].rec_start_tc
-        next_event_rec_end = edl.events[index+1].rec_end_tc
+        next_event_rec_start = edl.events[index + 1].rec_start_tc
+        next_event_rec_end = edl.events[index + 1].rec_end_tc
         diff = next_event_rec_start.frames - event_rec_end.frames
         if diff > 0:
             tc_diff = next_event_rec_start - event_rec_end
-            edl.events[index+1].rec_start_tc = next_event_rec_start - tc_diff
-            edl.events[index+1].rec_end_tc = next_event_rec_end - tc_diff
+            edl.events[index + 1].rec_start_tc = next_event_rec_start - tc_diff
+            edl.events[index + 1].rec_end_tc = next_event_rec_end - tc_diff
         # Special case: EDL with incorrect order:
         if diff < 0:
             tc_diff = event_rec_end - next_event_rec_start
-            edl.events[index+1].rec_start_tc = next_event_rec_start + tc_diff
-            edl.events[index+1].rec_end_tc = next_event_rec_end + tc_diff
+            edl.events[index + 1].rec_start_tc = next_event_rec_start + tc_diff
+            edl.events[index + 1].rec_end_tc = next_event_rec_end + tc_diff
     return edl
 
 
@@ -58,8 +58,8 @@ def set_edl_start_tc(edl, start_tc):
 
 def tc_from_string(framerate, start_tc):
     """Convert and return string to Timecode instance.
-    
-    String can be either a frame number or a string in smpte timecode format 
+
+    String can be either a frame number or a string in smpte timecode format
     like: "hh:mm:ss:ff".
 
     Args:
@@ -77,7 +77,7 @@ def tc_from_string(framerate, start_tc):
     except ValueError:
         try:
             new_start_tc = Timecode(framerate, start_tc)
-        except:
+        except (IndexError, ValueError):
             print("Wrong Timcode format: {0}".format(start_tc))
     return new_start_tc
 
@@ -92,8 +92,9 @@ def add_handles_to_edl(edl, handles):
     Return:
         Edl: Edit Decision List with added handles.
     """
-    if (edl.events[0].rec_start_tc.frame_number - handles) < 0:
-        edl = set_edl_start_tc(edl, str((edl.events[0].rec_start_tc + handles)))
+    first_event_rec_start = edl.events[0].rec_start_tc
+    if (first_event_rec_start.frame_number - handles) < 0:
+        edl = set_edl_start_tc(edl, str((first_event_rec_start + handles)))
     for event in edl.events:
         event.src_start_tc = event.src_start_tc - handles
         event.src_end_tc = event.src_end_tc + handles

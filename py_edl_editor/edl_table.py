@@ -1,29 +1,16 @@
 """Models for the QT Table View."""
 
 # Import third-party modules
+# pylint: disable=import-error
 from PySide2 import QtCore
 from PySide2 import QtGui
 from PySide2 import QtWidgets
 
 
-class ReelDelegate(QtWidgets.QItemDelegate):
+class EditableDelegate(QtWidgets.QItemDelegate):
+    """Delegate class that enables the cell to be editable."""
 
-    def createEditor(self, parent, option, index):
-        """Create the cell editor.
-
-        Args:
-            parent (QtWidgets.QtWidget): Base class of all user interface
-                objects.
-            option (QtWidgets.QStyleOptionViewItem): Describes the parameters
-                used to draw an item in a view widget.
-            index (QtCore.QModelIndex): Used to locate data in a data model.
-
-        Returns:
-            QtWidgets.QLineEdit: QLineEdit instance.
-
-        """
-        return super(ReelDelegate, self).createEditor(parent, option, index)
-
+    # pylint: disable=invalid-name,no-self-use,too-few-public-methods
     def setEditorData(self, editor, index):
         """Set index to the correct initial value.
 
@@ -33,11 +20,14 @@ class ReelDelegate(QtWidgets.QItemDelegate):
             index (QtCore.QModelIndex): Used to locate data in a data model.
 
         """
-        text = index.data(QtCore.Qt.EditRole) or index.data(QtCore.Qt.DisplayRole)
-        editor.setText(text)  
-            
+        text = index.data(QtCore.Qt.EditRole) or index.data(
+            QtCore.Qt.DisplayRole
+        )  # noqa: E501
+        editor.setText(text)
 
-class EdlTableEvent(object):
+
+# pylint: disable=too-few-public-methods
+class EdlTableEvent:
     """Main class for EDL Table Event."""
 
     def __init__(self, edl_event):
@@ -50,9 +40,10 @@ class EdlTableEvent(object):
         """
         self.edl_event = edl_event
 
-        
+
 class EdlTable(QtCore.QAbstractTableModel):
     """QT table showing EDL Events with info and version dropdowns."""
+
     column_names = [
         "Event#",
         "Reel",
@@ -67,6 +58,7 @@ class EdlTable(QtCore.QAbstractTableModel):
         "",
     ]
 
+    # pylint: disable=super-with-arguments
     def __init__(self):
         """Initialize the EdlTable instance."""
         super(EdlTable, self).__init__()
@@ -79,6 +71,7 @@ class EdlTable(QtCore.QAbstractTableModel):
         self.events = []
         self.endResetModel()
 
+    # pylint: disable=invalid-name,unused-argument
     def rowCount(self, index=QtCore.QModelIndex()):
         """Return the tables number of rows.
 
@@ -91,6 +84,7 @@ class EdlTable(QtCore.QAbstractTableModel):
         """
         return len(self.events)
 
+    # pylint: disable=invalid-name,unused-argument
     def columnCount(self, index=QtCore.QModelIndex()):
         """Return the table number of columns.
 
@@ -103,6 +97,7 @@ class EdlTable(QtCore.QAbstractTableModel):
         """
         return len(self.column_names)
 
+    # pylint: disable=invalid-name,unused-argument
     def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
         """Set up header row.
 
@@ -119,12 +114,10 @@ class EdlTable(QtCore.QAbstractTableModel):
             if role == QtCore.Qt.DisplayRole:
                 return EdlTable.column_names[section]
         return QtCore.QAbstractTableModel.headerData(
-            self,
-            section,
-            orientation,
-            role
-        )
+            self, section, orientation, role
+        )  # noqa: E501
 
+    # pylint: disable=inconsistent-return-statements
     def data(self, index, role=QtCore.Qt.DisplayRole):
         """Return data stored under the given role at the given index.
 
@@ -139,56 +132,59 @@ class EdlTable(QtCore.QAbstractTableModel):
         """
         if role == QtCore.Qt.DisplayRole:
             return self._return_items_role_data(index)
-        
-        if role == QtCore.Qt.FontRole and index.column() in [4, 5]:
-            return QtGui.QFont('Courier', 10)
-        
-        if role == QtCore.Qt.FontRole and index.column() in [6, 7, 8, 9]:
-            return QtGui.QFont('Courier', 12)
 
+        if role == QtCore.Qt.FontRole and index.column() in [4, 5]:
+            return QtGui.QFont("Courier", 10)
+
+        if role == QtCore.Qt.FontRole and index.column() in [6, 7, 8, 9]:
+            return QtGui.QFont("Courier", 12)
+
+    # pylint: disable=invalid-name,unused-argument
     def setData(self, index, value, role):
         """Set the role data for the item at index to value.
-        
+
         Args:
             index (QtCore.QModelIndex): Used to locate data in a data model.
-            value (string): Cell value. 
+            value (string): Cell value.
             role (int): QtCore Role.
-        
+
         """
         if index.column() == 1:
             self.events[index.row()].reel = value
         if index.column() == 2:
             self.events[index.row()].clip_name = value
         return True
-    
+
+    # pylint: disable=no-self-use
     def flags(self, index):
         """Return the item flags for the given index.
-        
+
         Args:
             index (QtCore.QModelIndex): Used to locate data in a data model.
-        
+
         Returns:
             PySide.QtCore.Qt.ItemFlags: Item flags for the given index.
-        
+
         """
         if index.column() == 1 or index.column() == 2:
-            return QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
-        else:
-            return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
-    
+            return (
+                QtCore.Qt.ItemIsEditable
+                | QtCore.Qt.ItemIsEnabled
+                | QtCore.Qt.ItemIsSelectable
+            )
+        return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+
     def add_edl_table_event(self, event):
         """Add a row to the table.
 
         Args:
-            event (py_edl_editor.edl_table.EdlTableEvent): Table event that will be 
-                added to the table.
+            event (py_edl_editor.edl_table.EdlTableEvent): Table event that
+                will be added to the table.
 
         """
         self.beginInsertRows(
-            QtCore.QModelIndex(),
-            self.rowCount(),
-            self.rowCount()
-        )
+            QtCore.QModelIndex(), self.rowCount(), self.rowCount()
+        )  # noqa: E501
         self.events.append(event)
         self.endInsertRows()
 
@@ -202,6 +198,7 @@ class EdlTable(QtCore.QAbstractTableModel):
         """
         return [event.edl_event for event in self.events]
 
+    # pylint: disable=too-many-return-statements
     def _return_items_role_data(self, index):
         """Return table data for items role.
 
@@ -247,12 +244,11 @@ class EdlTable(QtCore.QAbstractTableModel):
 
         """
         if cdl.has_sat and cdl.has_sop:
-            slope = (" ".join([str(slope) for slope in cdl.slope]))
-            offset = (" ".join([str(offset) for offset in cdl.offset]))
-            power = (" ".join([str(power) for power in cdl.power]))
+            slope = " ".join([str(slope) for slope in cdl.slope])
+            offset = " ".join([str(offset) for offset in cdl.offset])
+            power = " ".join([str(power) for power in cdl.power])
             return "{0}\n{1}\n{2}\n{3}".format(slope, offset, power, cdl.sat)
-        else:
-            return "-"
+        return "-"
 
     def _locator_string(self, event):
         """Return a human readable Avid Lcator string.
@@ -265,11 +261,10 @@ class EdlTable(QtCore.QAbstractTableModel):
 
         """
         if event.has_locator:
-            return("{0}\n{1}\n{2}".format(
-                event.loc_tc, event.loc_color, event.loc_name)
-            )
-        else:
-            return "-"
+            return "{0}\n{1}\n{2}".format(
+                event.loc_tc, event.loc_color, event.loc_name
+            )  # noqa: E501
+        return "-"
 
     def _timecode_string(self, timecode):
         """Return String representation of the given Timecode instance.
@@ -286,5 +281,4 @@ class EdlTable(QtCore.QAbstractTableModel):
         """
         if self.show_frames:
             return str(timecode.frame_number)
-        else:
-            return str(timecode)
+        return str(timecode)

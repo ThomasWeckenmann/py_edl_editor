@@ -1,12 +1,10 @@
 "CDL parser."
 
-# Import built-in modules
-import re
-
 # Import third-party modules
+# pylint: disable=import-error
 import cdl_convert
 
-    
+
 def add_ccc_to_edl(edl, ccc_file_path):
     """Add cdl values of the .ccc file to the EDL.
 
@@ -59,15 +57,15 @@ def _import_cdls(edl, cdls):
 
 def _add_edl_cdl_comments(event):
     """Add CDL comments to the edl event.
-    
+
     Args:
         event (Edl.event): EDL Event where CDL comments will be added.
-    
+
     """
     _remove_edl_cdl_comments(event)
-    slope = (" ".join([str(slope) for slope in event.cdl.slope]))
-    offset = (" ".join([str(offset) for offset in event.cdl.offset]))
-    power = (" ".join([str(power) for power in event.cdl.power]))
+    slope = " ".join([str(slope) for slope in event.cdl.slope])
+    offset = " ".join([str(offset) for offset in event.cdl.offset])
+    power = " ".join([str(power) for power in event.cdl.power])
     sop = "* ASC_SOP ({0})({1})({2})".format(slope, offset, power)
     sat = "* ASC_SAT {0}".format(event.cdl.sat)
     event.comments.append(sop)
