@@ -7,8 +7,6 @@ import platform
 # Import local modules
 from py_edl_editor.gui import PyEdlEditorGui
 
-__version__ = "0.1.0"
-
 
 def gui():
     """Run the mvc."""
