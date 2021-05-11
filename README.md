@@ -11,7 +11,7 @@ Work in progress, so collaboration welcome.
 
 ![py_edl_editor](py_edl_editor_gui.png?raw=true)
 
-Reqirements:
+Requirements:
 
     pip install PySide2
     pip install cdl_convert

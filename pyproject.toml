@@ -1,0 +1,12 @@
+[build-system]
+requires = ["flit_core >=2,<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.flit.metadata]
+module = "py_edl_editor"
+author = "Thomas Weckenmann"
+author-email = "tweckenmann0711@gmail.com"
+home-page = "https://github.com/ThomasWeckenmann/py_edl_editor"
+classifiers = [ "License :: OSI Approved :: MIT License",]
+description-file = "README.md"
+
