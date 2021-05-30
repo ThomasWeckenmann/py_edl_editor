@@ -4,7 +4,7 @@
 import os
 
 # Import third-party modules
-from timecode import Timecode
+from timecode import Timecode  # type: ignore
 
 # Import local modules
 from py_edl_editor.edl_parser import parse_edl

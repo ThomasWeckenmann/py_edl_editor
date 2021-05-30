@@ -5,9 +5,8 @@ import os
 import re
 
 # Import third-party modules
-# pylint: disable=import-error
-from edl import Parser
-from cdl_convert import correction
+from edl import Parser  # type: ignore
+from cdl_convert import correction  # type: ignore
 
 
 def parse_edl(edl_path, fps):

@@ -1,7 +1,7 @@
-"""Timceode tools."""
+"""Timecode tools."""
 
 # Import third-party modules
-from timecode import Timecode
+from timecode import Timecode  # type: ignore
 
 
 def remove_edl_gaps(edl):

@@ -6,8 +6,7 @@ import subprocess
 import sys
 
 # Import third-party modules
-# pylint: disable=import-error
-from cdl_convert import collection, write
+from cdl_convert import collection, write  # type: ignore
 from PySide2 import QtWidgets
 
 # Import local modules

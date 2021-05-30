@@ -1,8 +1,7 @@
-"CDL parser."
+"CDL tools."
 
 # Import third-party modules
-# pylint: disable=import-error
-import cdl_convert
+import cdl_convert  # type: ignore
 
 
 def add_ccc_to_edl(edl, ccc_file_path):

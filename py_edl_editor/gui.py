@@ -4,7 +4,6 @@
 import sys
 
 # Import third-party modules
-# pylint: disable=import-error
 from PySide2 import QtCore
 from PySide2 import QtWidgets
 
@@ -15,6 +14,7 @@ from py_edl_editor.gui_controller import GuiController
 from py_edl_editor.gui_controller import FRAMERATES
 
 
+# pylint: disable=maybe-no-member
 # pylint: disable=too-many-instance-attributes,too-many-locals
 # pylint: disable=too-many-statements,too-few-public-methods
 class PyEdlEditorApp(QtWidgets.QWidget):

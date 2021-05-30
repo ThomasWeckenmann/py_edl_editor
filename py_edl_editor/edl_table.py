@@ -1,7 +1,6 @@
 """Models for the QT Table View."""
 
 # Import third-party modules
-# pylint: disable=import-error
 from PySide2 import QtCore
 from PySide2 import QtGui
 from PySide2 import QtWidgets
