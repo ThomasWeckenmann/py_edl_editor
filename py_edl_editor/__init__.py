@@ -10,4 +10,4 @@ Usage without EDL: python __main__.py
 Usage with EDL: python __main__.py [path_to_edl] [framerate]
 """
 
-__version__ = "0.1.2"
+__version__ = "0.1.8"

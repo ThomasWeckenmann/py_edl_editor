@@ -9,4 +9,14 @@ author-email = "tweckenmann0711@gmail.com"
 home-page = "https://github.com/ThomasWeckenmann/py_edl_editor"
 classifiers = [ "License :: OSI Approved :: MIT License",]
 description-file = "README.md"
+requires-python = ">=3.7"
+requires = [
+    "PySide2",
+    "cdl_convert",
+    "opentimelineio",
+    "timecode",
+    "edl",
+]
 
+[tool.flit.scripts]
+edl_editor = "py_edl_editor.__main__:main"
