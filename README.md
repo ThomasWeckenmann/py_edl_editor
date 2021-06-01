@@ -1,6 +1,11 @@
 py_edl_editor
 =============
 
+[![PyPI version](https://badge.fury.io/py/py_edl_editor.svg)](https://badge.fury.io/py/py_edl_editor)
+![workflow](https://github.com/ThomasWeckenmann/py_edl_editor/actions/workflows/build.yml/badge.svg)
+[![codecov](https://codecov.io/gh/ThomasWeckenmann/py_edl_editor/branch/main/graph/badge.svg?token=L68DDHRZAS)](https://codecov.io/gh/ThomasWeckenmann/py_edl_editor)
+[![Maintainability](https://api.codeclimate.com/v1/badges/dbfe6a28130fd9e06566/maintainability)](https://codeclimate.com/github/ThomasWeckenmann/py_edl_editor/maintainability)
+
 A python EDL (Edit Decision List) GUI, based on the EDL library
 by Simon Hargreaves https://pypi.org/project/edl/ which is using
 [pytimecode](https://code.google.com/p/pytimecode/).
