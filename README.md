@@ -9,28 +9,31 @@ https://github.com/shidarin/cdl_convert
 
 Work in progress, so collaboration welcome.
 
-![py_edl_editor](py_edl_editor_gui.png?raw=true)
+![py_edl_editor](https://raw.githubusercontent.com/ThomasWeckenmann/py_edl_editor/main/py_edl_editor_gui.png)
 
-Requirements:
+Installation:
 
-    pip install PySide2
-    pip install cdl_convert
-    pip install opentimelineio
-    pip install timecode
-    pip install edl
-
+    pip install py_edl_editor
 
 Usage without EDL:
 
-    python edl_editor.py
+    edl_editor
 
 Usage with EDL:
 
-    python edl_editor.py [path_to_edl] [framerate]
-    python edl_editor.py path_to_edl.edl 24
+    edl_editor [path_to_edl] [optional framerate]
+    edl_editor path_to_edl.edl 24
 
 Accepted framerate values ['60', '59.94', '50', '30', '29.97', '25', '24',
 '23.98'].
+
+Dependencies:
+
+    PySide2
+    cdl_convert
+    opentimelineio
+    timecode
+    edl
 
 (The MIT License)
 
