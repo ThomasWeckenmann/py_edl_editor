@@ -19,3 +19,37 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+-----------------------------------------------------------------------
+
+                   Ancillary Software Licenses
+
+This software uses the following third-party open source libraries and
+are released under the terms detailed below. By downloading, copying,
+installing or using this software/tutorial, you agree to these terms.
+
+-----------------------------------------------------------------------
+
+> PySide2 [Copyright (C) 2009-2020, PySide2 Developers]:
+    This software uses PySide2; visit
+    [ https://www.qt.io/licensing/ ] for details.
+
+> cdl_convert [Copyright (C) 2015, Sean Wallitsch]:
+    This software uses cdl_convert; visit
+    [ https://github.com/shidarin/cdl_convert/blob/master/LICENSE ] for details.
+
+> opentimelineio [Copyright (C) 2016-2021, opentimelineio Developers]:
+    This software uses opentimelineio; visit
+    [ https://github.com/PixarAnimationStudios/OpenTimelineIO/blob/master/LICENSE.txt ]
+    for details.
+
+> timecode [Copyright (C) 2014-2021, Joshua Banton, PyTimeCode developers and
+    Erkan Ozgur Yilmaz]:
+    This software uses timecode; visit the following URL for details:
+    [ https://github.com/eoyilmaz/timecode/blob/master/LICENSE ]
+
+> edl [Copyright (C) 2013-2018 Simon Hargreaves]:
+    This software uses edl; visit the following URL for details:
+    [ https://github.com/simonh10/python-edl/blob/master/LICENSE ]
+
+-----------------------------------------------------------------------
