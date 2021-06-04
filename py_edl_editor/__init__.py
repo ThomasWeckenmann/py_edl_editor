@@ -1,4 +1,4 @@
-""" ``py_edl_editor`` Module
+""" A cross-platform, PySide2-based EDL (Edit Decision List) GUI.
 
 This is the main py_edl_editor module.
 py_edl_editor is a python EDL (Edit Decision List) GUI, based on the EDL
@@ -11,4 +11,4 @@ Usage without EDL: python __main__.py
 Usage with EDL: python __main__.py [path_to_edl] [framerate]
 """
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
